@@ -8,6 +8,7 @@ import { userInfoAtom } from '../../atoms/global';
 import { darkTheme } from '../../styles/theme-dark';
 import { executeEvent } from '../../utils/events';
 import { DesktopSideBar } from './DesktopLeftSideBar';
+import { ARC_OUTER_PX } from './SidePanelArc';
 import { sidePanelStorageKey } from './sidePanel';
 
 vi.mock('../CoreSyncStatus', () => ({
@@ -250,6 +251,31 @@ describe('DesktopSideBar', () => {
       });
 
       expect(column).toHaveStyle({ pointerEvents: 'auto' });
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('opens the half circle where the pointer meets the edge, without its handle', () => {
+    vi.useFakeTimers();
+    try {
+      renderPanel({ edgeHandle: false, layout: 'arc' });
+      const edge = document.querySelector(
+        '[data-side-panel-edge="edge"]'
+      ) as HTMLElement;
+
+      fireEvent.mouseEnter(edge, { clientY: 500 });
+      act(() => {
+        vi.advanceTimersByTime(10);
+      });
+
+      const arc = document.querySelector(
+        '[data-side-panel-layout="arc"]'
+      ) as HTMLElement;
+      expect(arc).toHaveStyle({
+        pointerEvents: 'auto',
+        top: `${500 - ARC_OUTER_PX}px`,
+      });
     } finally {
       vi.useRealTimers();
     }

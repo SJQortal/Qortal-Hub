@@ -326,6 +326,8 @@ export const DesktopSideBar = ({
   // The room the panel is placed in, measured: fixed boxes here sit in
   // Group's wrappers, under the title and navigation bars, not the window.
   const roomRef = useRef<HTMLDivElement | null>(null);
+  // Without the handle: where the pointer met the edge, in the room.
+  const [edgeY, setEdgeY] = useState<number | null>(null);
   const [roomHeight, setRoomHeight] = useState(() =>
     typeof window === 'undefined' ? 0 : window.innerHeight
   );
@@ -583,7 +585,9 @@ export const DesktopSideBar = ({
     const low = arcOuter + 8;
     const high = roomHeight - arcOuter - 8;
     if (high < low) return middle;
-    return Math.min(high, Math.max(low, nudgeTop + handleHeight / 2));
+    // At the handle's middle, or, without it, where the pointer met the edge.
+    const anchor = edgeHandle ? nudgeTop + handleHeight / 2 : (edgeY ?? middle);
+    return Math.min(high, Math.max(low, anchor));
   })();
   const isQdnActive = (item: { service: string; name: string }) =>
     desktopViewMode === 'apps' &&
@@ -787,7 +791,13 @@ export const DesktopSideBar = ({
       ) : (
         <Box
           data-side-panel-edge={edgeHandle ? 'handle' : 'edge'}
-          onMouseEnter={showSidebar}
+          onMouseEnter={(event) => {
+            if (!edgeHandle) {
+              const top = roomRef.current?.getBoundingClientRect().top ?? 0;
+              setEdgeY(event.clientY - top);
+            }
+            showSidebar();
+          }}
           sx={{
             position: 'fixed',
             left: 0,
