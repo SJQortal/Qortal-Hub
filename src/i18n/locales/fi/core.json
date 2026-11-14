@@ -457,7 +457,11 @@
     "pinned_empty": "mitään ei ole vielä kiinnitetty. Kiinnitä sovellus alla olevasta kirjastosta, niin se pysyy tässä.",
     "pinned_hint": "järjestä vetämällä · luo kansio pudottamalla sovellus toisen päälle · lisää toimintoja hiiren oikealla painikkeella",
     "results_apps": "sovellukset ja verkkosivustot",
-    "results_saved": "kiinnitetyt sovelluksesi ja kirjanmerkkisi"
+    "results_saved": "kiinnitetyt sovelluksesi ja kirjanmerkkisi",
+    "save_later": "ei nyt",
+    "save_retry": "yritä uudelleen",
+    "save_text": "kiinnitetyt sovelluksesi, kirjanmerkkisi ja kansiosi tässä järjestyksessä jokaisella laitteella, jolla kirjaudut sisään.",
+    "save_title": "tallennetaanko tämä asettelu QDN:ään?"
   },
   "level": "taso",
   "library": "kirjasto",
@@ -881,15 +885,15 @@
     "wallets": "Lompakot"
   },
   "quitter_feed": {
-    "empty_message_no_following": "Selaa Quitteria ja seuraa tilejä syöttesi rakentamiseksi.",
+    "empty_message_no_following": "Selaa sovellusta {{app}} ja seuraa tilejä syöttesi rakentamiseksi.",
     "empty_message_no_name": "Kirjaudu Qortal-nimellä rakentaaksesi personoidun syötteen.",
-    "empty_message_no_posts": "Seuraamasi tilit eivät ole vielä julkaisseet Quitterissa.",
+    "empty_message_no_posts": "Seuraamasi tilit eivät ole vielä julkaisseet sovelluksessa {{app}}.",
     "empty_title_general": "Ei julkaisuja saatavilla",
     "empty_title_no_following": "Et näytä seuraavan vielä ketään.",
     "empty_title_no_name": "Kirjaudu sisään personoidaksesi syötteesi",
     "empty_title_no_posts": "Ei julkaisuja seuraamiltasi tileiltä",
-    "error_following": "Personoitu Quitter-syöte ei ole juuri nyt käytettävissä. Yritä uudelleen.",
-    "error_generic": "Julkinen Quitter-syöte ei ole juuri nyt käytettävissä. Yritä hetken kuluttua uudelleen.",
+    "error_following": "Personoitu {{app}}-syöte ei ole juuri nyt käytettävissä. Yritä uudelleen.",
+    "error_generic": "Julkinen {{app}}-syöte ei ole juuri nyt käytettävissä. Yritä hetken kuluttua uudelleen.",
     "error_timeout": "Syöteen lataus epäonnistui. Voit yrittää uudelleen tai palata Yleiseen.",
     "error_title_following": "Syöteen lataus epäonnistui",
     "error_title_general": "Julkaisuja ei voitu ladata",

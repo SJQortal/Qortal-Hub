@@ -457,7 +457,11 @@
     "pinned_empty": "还没有固定任何应用。从下方的应用库中固定一个应用，它就会显示在这里。",
     "pinned_hint": "拖动可重新排序 · 将一个应用拖到另一个应用上可创建文件夹 · 右键单击查看更多操作",
     "results_apps": "应用和网站",
-    "results_saved": "已固定的应用和书签"
+    "results_saved": "已固定的应用和书签",
+    "save_later": "以后再说",
+    "save_retry": "重试",
+    "save_text": "你的已固定应用、书签和文件夹将按此排列，出现在你登录的每台设备上。",
+    "save_title": "将此布局保存到QDN？"
   },
   "level": "等级",
   "library": "图书馆",
@@ -881,15 +885,15 @@
     "wallets": "钱包"
   },
   "quitter_feed": {
-    "empty_message_no_following": "浏览 Quitter 并关注账号以构建你的动态。",
+    "empty_message_no_following": "浏览 {{app}} 并关注账号以构建你的动态。",
     "empty_message_no_name": "使用 Qortal 名称登录以建立个性化动态。",
-    "empty_message_no_posts": "你关注的账号尚未在 Quitter 发帖。",
+    "empty_message_no_posts": "你关注的账号尚未在 {{app}} 发帖。",
     "empty_title_general": "暂无帖子",
     "empty_title_no_following": "你似乎还没有关注任何人。",
     "empty_title_no_name": "登录以个性化你的动态",
     "empty_title_no_posts": "暂无已关注账号的帖子",
-    "error_following": "个性化 Quitter 动态暂时不可用。请重试。",
-    "error_generic": "公开 Quitter 动态暂时不可用。请稍后再试。",
+    "error_following": "个性化 {{app}} 动态暂时不可用。请重试。",
+    "error_generic": "公开 {{app}} 动态暂时不可用。请稍后再试。",
     "error_timeout": "动态加载失败。你可以重试或返回「综合」。",
     "error_title_following": "动态加载失败",
     "error_title_general": "无法加载帖子",

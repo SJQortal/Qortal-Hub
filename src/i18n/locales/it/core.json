@@ -457,7 +457,11 @@
     "pinned_empty": "non c’è ancora nulla di fissato. Fissa un’app dalla libreria qui sotto per tenerla qui.",
     "pinned_hint": "trascina per riordinare · rilascia un’app su un’altra per creare una cartella · clic destro per altre opzioni",
     "results_apps": "app e siti web",
-    "results_saved": "le tue app fissate e i segnalibri"
+    "results_saved": "le tue app fissate e i segnalibri",
+    "save_later": "non ora",
+    "save_retry": "riprova",
+    "save_text": "le tue app fissate, i segnalibri e le cartelle, disposti così, su ogni dispositivo in cui accedi.",
+    "save_title": "salvare questa disposizione su QDN?"
   },
   "level": "livello",
   "library": "libreria",
@@ -881,15 +885,15 @@
     "wallets": "Wallet"
   },
   "quitter_feed": {
-    "empty_message_no_following": "Sfoglia Quitter e segui account per costruire il tuo feed.",
+    "empty_message_no_following": "Sfoglia {{app}} e segui account per costruire il tuo feed.",
     "empty_message_no_name": "Accedi con un nome Qortal per creare un feed personalizzato.",
-    "empty_message_no_posts": "Gli account che segui non hanno ancora pubblicato su Quitter.",
+    "empty_message_no_posts": "Gli account che segui non hanno ancora pubblicato su {{app}}.",
     "empty_title_general": "Nessun post disponibile",
     "empty_title_no_following": "Sembra che tu non segua ancora nessuno.",
     "empty_title_no_name": "Accedi per personalizzare il feed",
     "empty_title_no_posts": "Nessun post dagli account che segui",
-    "error_following": "Il feed Quitter personalizzato è temporaneamente non disponibile. Riprova.",
-    "error_generic": "Il feed pubblico Quitter è temporaneamente non disponibile. Riprova fra un momento.",
+    "error_following": "Il feed {{app}} personalizzato è temporaneamente non disponibile. Riprova.",
+    "error_generic": "Il feed pubblico {{app}} è temporaneamente non disponibile. Riprova fra un momento.",
     "error_timeout": "Caricamento del feed non riuscito. Puoi riprovare o tornare a Generale.",
     "error_title_following": "Caricamento feed non riuscito",
     "error_title_general": "Impossibile caricare i post",
