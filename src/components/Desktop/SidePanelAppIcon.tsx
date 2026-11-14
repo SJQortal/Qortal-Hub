@@ -1,5 +1,6 @@
-import { Avatar } from '@mui/material';
+import { Avatar, Box } from '@mui/material';
 import { useState } from 'react';
+import LogoSelected from '../../assets/svgs/LogoSelected.svg';
 import { getBaseApiReactForAvatar } from '../../utils/globalApi';
 
 type SidePanelAppIconProps = {
@@ -7,7 +8,10 @@ type SidePanelAppIconProps = {
   size: number;
 };
 
-/** A Q-App's or website's picture, or its first letter until there is one. */
+/**
+ * A Q-App's or website's picture, or the Qortal logo when it has none, as
+ * the launcher's tiles and the tabs show it.
+ */
 export const SidePanelAppIcon = ({ name, size }: SidePanelAppIconProps) => {
   const [failed, setFailed] = useState(false);
   const src = failed
@@ -20,10 +24,16 @@ export const SidePanelAppIcon = ({ name, size }: SidePanelAppIconProps) => {
       alt=""
       imgProps={{ onError: () => setFailed(true) }}
       src={src}
-      sx={{ fontSize: size * 0.5, height: size, width: size }}
+      sx={{ height: size, width: size }}
       variant="rounded"
     >
-      {name.charAt(0).toUpperCase()}
+      <Box
+        alt=""
+        component="img"
+        draggable={false}
+        src={LogoSelected}
+        sx={{ height: 'auto', width: '62%' }}
+      />
     </Avatar>
   );
 };
