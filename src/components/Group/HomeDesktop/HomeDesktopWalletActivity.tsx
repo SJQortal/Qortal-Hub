@@ -16,10 +16,10 @@ import {
   WalletActivityHistoryToggle,
 } from './WalletActivityHistory';
 import {
-  HOME_WIDE_DASHBOARD_MIN_WIDTH_PX,
   WALLET_ACTIVITY_HISTORY_OPEN_MIN_HEIGHT_PX,
   WALLET_ACTIVITY_RECENT_PAYMENT_FETCH_LIMIT,
 } from './homeDesktopConstants';
+import { homeWalletRailRect } from './homeWindows';
 import type { WalletActivityEntry, WalletActivityTransaction } from './types';
 import {
   formatWalletActivityAmount,
@@ -28,22 +28,6 @@ import {
   getWalletActivityRecipientAddress,
   isWalletActivityTimestampRecent,
 } from './utils';
-
-const HOME_RIGHT_RAIL_DATA_ATTR = '[data-home-right-rail]';
-
-function getRightRailRectFromElement(element: HTMLElement | null) {
-  if (!element) return null;
-  if (
-    typeof window !== 'undefined' &&
-    !window.matchMedia(`(min-width: ${HOME_WIDE_DASHBOARD_MIN_WIDTH_PX}px)`)
-      .matches
-  ) {
-    return null;
-  }
-  const rail = element.closest(HOME_RIGHT_RAIL_DATA_ATTR);
-  if (!rail) return null;
-  return rail.getBoundingClientRect();
-}
 
 /** Whether the element is at least `minHeight` px tall, as it is resized. */
 const useIsAtLeastTall = (node: HTMLElement | null, minHeight: number) => {
@@ -113,7 +97,7 @@ export const HomeDesktopWalletActivity = () => {
     (target: HTMLElement | null) => {
       if (!target) return;
       const rect = target.getBoundingClientRect();
-      const rightRailRect = getRightRailRectFromElement(target);
+      const rightRailRect = homeWalletRailRect();
       executeEvent('openReceiveQortInternal', {
         address: userAddress ?? '',
         anchorRect: {
@@ -410,7 +394,7 @@ export const HomeDesktopWalletActivity = () => {
           onClick={(event) => {
             const el = event.currentTarget as HTMLElement;
             const rect = el.getBoundingClientRect();
-            const rightRailRect = getRightRailRectFromElement(el);
+            const rightRailRect = homeWalletRailRect();
             executeEvent('openPaymentInternal', {
               anchorRect: {
                 height: rect.height,
