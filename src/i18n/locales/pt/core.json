@@ -469,7 +469,11 @@
     "pinned_empty": "ainda não há nada fixado. Fixe uma aplicação da biblioteca abaixo para a manter aqui.",
     "pinned_hint": "arraste para reordenar · solte uma aplicação sobre outra para criar uma pasta · clique com o botão direito para mais opções",
     "results_apps": "aplicações e sites",
-    "results_saved": "as suas aplicações fixadas e marcadores"
+    "results_saved": "as suas aplicações fixadas e marcadores",
+    "save_later": "agora não",
+    "save_retry": "tentar novamente",
+    "save_text": "as suas aplicações fixadas, marcadores e pastas, organizados assim, em todos os dispositivos em que iniciar sessão.",
+    "save_title": "salvar esta disposição na QDN?"
   },
   "level": "nivel",
   "library": "biblioteca",
@@ -729,6 +733,7 @@
   "name": "nome",
   "name_app": "nome/Aplicativo",
   "navbar": {
+    "search_library": "Pesquisar «{{query}}» nas Q-Apps",
     "search_placeholder": "Pesquisar Q-Apps ou introduzir qortal://",
     "session": {
       "lock_description": "Manter as conversas e chamadas ligadas",
@@ -737,7 +742,12 @@
       "logout_title": "Terminar sessão",
       "menu_aria": "Opções da sessão",
       "tooltip": "Bloquear ou terminar sessão"
-    }
+    },
+    "suggestion_type": {
+      "app": "Q-App",
+      "website": "Site"
+    },
+    "suggestions": "Sugestões"
   },
   "new_post_in": "nova postagem em {{ title }}",
   "none": "nenhum",
@@ -882,15 +892,15 @@
     "wallets": "Carteiras"
   },
   "quitter_feed": {
-    "empty_message_no_following": "Explora o Quitter e segue contas para construíres o teu feed.",
+    "empty_message_no_following": "Explora o {{app}} e segue contas para construíres o teu feed.",
     "empty_message_no_name": "Inicia sessão com um nome Qortal para criares um feed personalizado.",
-    "empty_message_no_posts": "As contas que segues ainda não publicaram no Quitter.",
+    "empty_message_no_posts": "As contas que segues ainda não publicaram no {{app}}.",
     "empty_title_general": "Sem publicações disponíveis",
     "empty_title_no_following": "Parece que ainda não segues ninguém.",
     "empty_title_no_name": "Inicia sessão para personalizares o teu feed",
     "empty_title_no_posts": "Sem publicações de contas que segues",
-    "error_following": "O feed personalizado Quitter está temporariamente indisponível. Tenta novamente.",
-    "error_generic": "O feed público Quitter está temporariamente indisponível. Tenta novamente daqui a pouco.",
+    "error_following": "O feed personalizado {{app}} está temporariamente indisponível. Tenta novamente.",
+    "error_generic": "O feed público {{app}} está temporariamente indisponível. Tenta novamente daqui a pouco.",
     "error_timeout": "Falha ao carregar o feed. Podes tentar de novo ou voltar ao Geral.",
     "error_title_following": "Falha ao carregar o feed",
     "error_title_general": "Não foi possível carregar as publicações",
