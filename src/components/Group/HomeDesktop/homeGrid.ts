@@ -30,6 +30,11 @@ export const HOME_GRID_GAP_PX = 20;
 export const HOME_GRID_MIN_WIDTH_PX = 1100;
 export const HOME_GRID_TWO_COLUMNS_MIN_WIDTH_PX = 700;
 const HOME_GRID_MAX_H = 240;
+/**
+ * A window that follows its content takes all of its measured height; this
+ * only guards against a measurement gone wrong.
+ */
+const HOME_GRID_MAX_MEASURED_H = 10_000;
 const HOME_GRID_MAX_Y = 100_000;
 
 /** Every window, in the order the settings and the menus list them. */
@@ -50,6 +55,12 @@ export const HOME_AUTO_HEIGHT_WINDOWS: ReadonlySet<HomeWindowId> = new Set([
   'account',
   'widgets',
 ]);
+
+/** The tallest a window can be, in rows. */
+const maxHeightOf = (key: HomeWindowId) =>
+  HOME_AUTO_HEIGHT_WINDOWS.has(key)
+    ? HOME_GRID_MAX_MEASURED_H
+    : HOME_GRID_MAX_H;
 
 /**
  * The smallest a window can be made, in columns and rows: what its content
@@ -114,7 +125,7 @@ export const clampHomeWindow = (
 ): HomeGridItem => {
   const min = HOME_WINDOW_MIN_SIZE[item.key];
   const w = clamp(int(item.w, min.w), min.w, HOME_GRID_COLUMNS);
-  const h = clamp(int(item.h, min.h), min.h, HOME_GRID_MAX_H);
+  const h = clamp(int(item.h, min.h), min.h, maxHeightOf(item.key));
   return {
     key: item.key,
     x: clamp(int(item.x, 0), 0, HOME_GRID_COLUMNS - w),
@@ -209,10 +220,14 @@ export const homeDefaultGrid = (
  * window inside the grid and within its sizes, no overlaps, nothing left
  * floating. A window it lacks (one added later) goes under everything, at
  * its default size. Anything that isn't a list gives undefined.
+ *
+ * The `hidden` windows keep their places, which the shown ones may have
+ * taken: only the shown ones settle, so saving never changes what shows.
  */
 export const normalizeHomeGrid = (
   value: unknown,
-  stack?: readonly HomeStackPanelId[]
+  stack?: readonly HomeStackPanelId[],
+  hidden: readonly HomeWindowId[] = []
 ): HomeGridItem[] | undefined => {
   if (!Array.isArray(value)) return undefined;
   const items: HomeGridItem[] = [];
@@ -234,8 +249,14 @@ export const normalizeHomeGrid = (
     items.push({ ...start, y: bottom });
     bottom += start.h;
   }
-  return settleHomeGrid(
-    HOME_WINDOW_IDS.map((key) => items.find((item) => item.key === key))
+  const ordered = HOME_WINDOW_IDS.map((key) =>
+    items.find((item) => item.key === key)
+  ).filter(Boolean);
+  const settled = settleHomeGrid(
+    ordered.filter((item) => !hidden.includes(item.key))
+  );
+  return ordered.map(
+    (item) => settled.find((other) => other.key === item.key) ?? item
   );
 };
 
@@ -306,7 +327,7 @@ export const resizeHomeWindow = (
     ...item,
     x: Math.min(item.x, HOME_GRID_COLUMNS - width),
     w: width,
-    h: clamp(int(h, item.h), min.h, HOME_GRID_MAX_H),
+    h: clamp(int(h, item.h), min.h, maxHeightOf(key)),
   };
   return settleHomeGrid(
     settle(
@@ -333,7 +354,7 @@ export const homeGridShown = (
       .map((item) => {
         const rows = measuredRows[item.key];
         return rows && HOME_AUTO_HEIGHT_WINDOWS.has(item.key)
-          ? { ...item, h: clamp(rows, 1, HOME_GRID_MAX_H) }
+          ? { ...item, h: clamp(rows, 1, HOME_GRID_MAX_MEASURED_H) }
           : item;
       })
   );

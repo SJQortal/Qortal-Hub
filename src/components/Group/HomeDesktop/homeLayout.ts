@@ -132,11 +132,14 @@ export const normalizeHomeLayout = (
   const normalStack = Array.isArray(stack)
     ? completeHomeStack(stack)
     : [...fallback.stack];
-  const normalGrid = normalizeHomeGrid(grid, normalStack) ?? fallback.grid;
+  const normalHidden = Array.isArray(hidden)
+    ? HOME_PANEL_IDS.filter((id) => hidden.includes(id))
+    : [...fallback.hidden];
+  // The hidden panels don't move the shown ones (normalizeHomeGrid).
+  const normalGrid =
+    normalizeHomeGrid(grid, normalStack, normalHidden) ?? fallback.grid;
   return {
-    hidden: Array.isArray(hidden)
-      ? HOME_PANEL_IDS.filter((id) => hidden.includes(id))
-      : [...fallback.hidden],
+    hidden: normalHidden,
     stack: normalStack,
     ...(normalGrid ? { grid: [...normalGrid] } : {}),
   };

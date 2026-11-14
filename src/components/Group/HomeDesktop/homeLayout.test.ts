@@ -47,6 +47,22 @@ describe('normalizeHomeLayout', () => {
     expect(normalizeHomeLayout({}, fallback).hidden).toEqual(['wallet']);
   });
 
+  it('keeps a hidden panel from moving the shown ones', () => {
+    // Quick Tools rose into the room Qortino left, and the layout was saved.
+    const grid = homeDefaultGrid().map((item) =>
+      item.key === 'tools' ? { ...item, y: 0 } : item
+    );
+    const layout = normalizeHomeLayout({
+      grid,
+      hidden: ['qortino'],
+      stack: ['widgets', 'groupActivity', 'feed'],
+    });
+    const at = (key: string) => layout.grid?.find((item) => item.key === key);
+    expect(at('tools')).toMatchObject({ x: 0, y: 0 });
+    // Qortino keeps its place, for when it's shown again.
+    expect(at('qortino')).toMatchObject({ x: 0, y: 0, h: 46 });
+  });
+
   it('puts a panel the stored order lacks back after its usual neighbour', () => {
     expect(completeHomeStack(['feed', 'widgets'])).toEqual([
       'feed',

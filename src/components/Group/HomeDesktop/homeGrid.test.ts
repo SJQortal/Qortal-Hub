@@ -144,6 +144,41 @@ describe('homeGridShown', () => {
     // The feed's height is its own.
     expect(rect(shown, 'feed')).toEqual([12, 109, 12, 63]);
   });
+
+  it('gives a window that follows its content all of its measured height', () => {
+    // Four tall widgets, one over another: about 2,900 px.
+    const shown = homeGridShown(homeDefaultGrid(), () => true, {
+      widgets: 292,
+    });
+    expect(rect(shown, 'widgets')).toEqual([0, 64, 24, 292]);
+    // What's under it starts below it, so nothing overlaps.
+    expect(at(shown, 'groupActivity')?.y).toBe(64 + 292);
+  });
+});
+
+describe('saving with hidden windows', () => {
+  it('keeps what shows as it was while moving', () => {
+    // Qortino hidden, then the account card moved under Quick Tools.
+    const hidden: HomeWindowId[] = ['qortino'];
+    const isShown = (key: HomeWindowId) => !hidden.includes(key);
+    const grid = homeDefaultGrid();
+    const start = homeGridShown(grid, isShown);
+    const tools = at(start, 'tools');
+    const moved = moveHomeWindow(start, 'account', 0, tools.y + tools.h);
+    const preview = homeGridShown(moved, () => true);
+    // While moving, Featured Q-Apps goes under the account card.
+    expect(at(preview, 'featured').y).toBeGreaterThan(at(preview, 'account').y);
+
+    const saved = normalizeHomeGrid(
+      mergeHomeGrid(grid, moved),
+      undefined,
+      hidden
+    );
+
+    expect(homeGridShown(saved, isShown)).toEqual(preview);
+    // Qortino keeps its place, for when it's shown again.
+    expect(rect(saved, 'qortino')).toEqual([0, 0, 6, 46]);
+  });
 });
 
 describe('mergeHomeGrid', () => {
