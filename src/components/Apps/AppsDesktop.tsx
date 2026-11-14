@@ -99,6 +99,19 @@ import {
   getDialogSecondaryButtonSx,
 } from '../App/dialogSurface';
 import { pickNextTabFromMru, tabsLeftByCloseAll } from './tabSelection';
+import {
+  createTabSessionWriter,
+  isPrivateTabToReopen,
+  loadTabSession,
+  reportedAppPath,
+  restoredTab,
+  serializeTabSession,
+  tabFlags,
+  type TabSession,
+  type TabSessionWriter,
+} from './tabSession';
+import { useHandlePrivateApps } from '../../hooks/useHandlePrivateApps';
+import { isSamePrivateApp } from '../../hooks/privatePinnedApps';
 
 const uid = new ShortUniqueId({ length: 8 });
 const MAX_OPEN_APP_TABS = 10;
@@ -259,6 +272,18 @@ export const AppsDesktop = ({
     null
   );
   const tabInteractionLockedRef = useRef(false);
+  // The account whose open tabs are kept (tabSession.ts), once they are read.
+  const [sessionAddress, setSessionAddress] = useState<string | null>(null);
+  const storedSessionRef = useRef<TabSession | null>(null);
+  const sessionWriterRef = useRef<TabSessionWriter | null>(null);
+  // Tabs whose app has been shown. A restored tab loads the first time it is
+  // selected, then stays loaded like the others.
+  const [shownTabIds, setShownTabIds] = useState<Set<string>>(() => new Set());
+  const { openApp: openPrivateApp } = useHandlePrivateApps();
+  // The hook hands out a new `openApp` on every render: keep the latest.
+  const openPrivateAppRef = useRef(openPrivateApp);
+  openPrivateAppRef.current = openPrivateApp;
+  const reopeningPrivateTabIdsRef = useRef<Set<string>>(new Set());
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -267,6 +292,88 @@ export const AppsDesktop = ({
     })
   );
   const { t } = useTranslation(['auth', 'core', 'group', 'question']);
+
+  // The open tabs come back after a restart: once, when the account is first
+  // known, and never over tabs already opened in this run.
+  useEffect(() => {
+    if (!myAddress || sessionAddress) return;
+    const saved = loadTabSession(myAddress, MAX_OPEN_APP_TABS);
+    storedSessionRef.current = saved;
+    if (tabs.length === 0 && saved.tabs.length > 0) {
+      setTabs(saved.tabs.map(restoredTab));
+      // Hub starts on Home and its Apps button opens the launcher, so no
+      // restored tab is selected, and none loads, until one is chosen. The
+      // one that was selected is the first Hub falls back to.
+      recentTabIdsRef.current = saved.selectedTabId
+        ? [saved.selectedTabId]
+        : [];
+    }
+    setSessionAddress(myAddress);
+  }, [myAddress, sessionAddress, tabs.length]);
+
+  useEffect(() => {
+    if (!sessionAddress) return;
+    const writer = createTabSessionWriter(sessionAddress, {
+      saved: storedSessionRef.current ?? undefined,
+    });
+    sessionWriterRef.current = writer;
+    const flush = () => writer.flush();
+    window.addEventListener('pagehide', flush);
+    window.addEventListener('beforeunload', flush);
+    return () => {
+      window.removeEventListener('pagehide', flush);
+      window.removeEventListener('beforeunload', flush);
+      writer.flush();
+      sessionWriterRef.current = null;
+    };
+  }, [sessionAddress]);
+
+  // Saves the tabs, their order, the selected one (or, while none is, the
+  // last one selected) and where each app is.
+  useEffect(() => {
+    if (!sessionAddress || myAddress !== sessionAddress) return;
+    const selectedTabId =
+      selectedTab?.tabId ??
+      pickNextTabFromMru(tabs, recentTabIdsRef.current)?.tabId;
+    sessionWriterRef.current?.update(
+      serializeTabSession(tabs, selectedTabId, MAX_OPEN_APP_TABS, (tab) =>
+        reportedAppPath(tab, navigationController?.[tab.tabId]?.currentLink)
+      )
+    );
+  }, [
+    myAddress,
+    navigationController,
+    selectedTab?.tabId,
+    sessionAddress,
+    tabs,
+  ]);
+
+  useEffect(() => {
+    const tabId = selectedTab?.tabId;
+    if (!tabId) return;
+    setShownTabIds((prev) =>
+      prev.has(tabId) ? prev : new Set(prev).add(tabId)
+    );
+  }, [selectedTab?.tabId]);
+
+  // A restored private app is downloaded and decrypted again when its tab is
+  // selected; the opened app then takes the tab's place (addTabFunc).
+  const reopenPrivateTab = useCallback((tab) => {
+    if (!isPrivateTabToReopen(tab)) return;
+    const reopening = reopeningPrivateTabIdsRef.current;
+    if (reopening.has(tab.tabId)) return;
+    reopening.add(tab.tabId);
+    Promise.resolve()
+      .then(() =>
+        openPrivateAppRef.current(tab.privateAppProperties, false, undefined)
+      )
+      .catch((error) => console.error(error))
+      .finally(() => reopening.delete(tab.tabId));
+  }, []);
+
+  useEffect(() => {
+    if (isPrivateTabToReopen(selectedTab)) reopenPrivateTab(selectedTab);
+  }, [reopenPrivateTab, selectedTab]);
 
   const myApp = useMemo(() => {
     return availableQapps.find(
@@ -775,6 +882,20 @@ export const AppsDesktop = ({
     return () => setAppsSubPageCanGoBack(false);
   }, [setAppsSubPageCanGoBack]);
 
+  /** Shows a tab that is already in the strip, where it is. */
+  const showTabInPlace = (tab) => {
+    setPendingVisualTabActivationId(null);
+    setDelayedVisualActiveTabId(null);
+    setEnteringTabIds((prev) => prev.filter((id) => id !== tab.tabId));
+    setIsAddTabFocused(false);
+    setIsAddTabWaitingForPointerMove(false);
+    addTabPointerOriginRef.current = null;
+    setSelectedTab(tab);
+    setMode('viewer');
+    setDesktopViewMode('apps');
+    setIsNewTabWindow(false);
+  };
+
   const addTabFunc = (e) => {
     const data = e.detail?.data;
     if (data?.internal) {
@@ -782,18 +903,32 @@ export const AppsDesktop = ({
         (tab) => tab?.internal === data.internal
       );
       if (existingInternalTab) {
-        setPendingVisualTabActivationId(null);
-        setDelayedVisualActiveTabId(null);
-        setEnteringTabIds((prev) =>
-          prev.filter((id) => id !== existingInternalTab.tabId)
+        showTabInPlace(existingInternalTab);
+        return;
+      }
+    }
+    // A private app opened again takes the place of its restored tab, and
+    // keeps that tab's marks.
+    if (data?.isPrivate && !isPrivateTabToReopen(data)) {
+      const waiting = tabs.filter(
+        (tab) =>
+          isPrivateTabToReopen(tab) &&
+          isSamePrivateApp(tab.privateAppProperties, data.privateAppProperties)
+      );
+      const restored =
+        waiting.find((tab) =>
+          reopeningPrivateTabIdsRef.current.has(tab.tabId)
+        ) ?? waiting[0];
+      if (restored) {
+        const reopened = {
+          ...tabFlags(restored),
+          ...data,
+          tabId: restored.tabId,
+        };
+        setTabs((prev) =>
+          prev.map((tab) => (tab?.tabId === restored.tabId ? reopened : tab))
         );
-        setIsAddTabFocused(false);
-        setIsAddTabWaitingForPointerMove(false);
-        addTabPointerOriginRef.current = null;
-        setSelectedTab(existingInternalTab);
-        setMode('viewer');
-        setDesktopViewMode('apps');
-        setIsNewTabWindow(false);
+        showTabInPlace(reopened);
         return;
       }
     }
@@ -971,6 +1106,8 @@ export const AppsDesktop = ({
     setIsAddTabWaitingForPointerMove(false);
     addTabPointerOriginRef.current = null;
     setSelectedTab(data);
+    // Choosing it again retries a private app that could not be reopened.
+    reopenPrivateTab(data);
     if (isDev) {
       setDesktopViewMode('dev');
       setDevMode('viewer');
@@ -1811,6 +1948,13 @@ export const AppsDesktop = ({
             )}
 
           {viewerTabs.map((tab) => {
+            // A restored tab loads the first time it is selected; a private
+            // app's waits until it is reopened.
+            const isLoaded =
+              !isPrivateTabToReopen(tab) &&
+              (shownTabIds.has(tab?.tabId) ||
+                tab?.tabId === selectedTab?.tabId);
+            if (!isLoaded) return null;
             const hideContentForDevHome =
               desktopViewMode === 'dev' &&
               devMode === 'home' &&
