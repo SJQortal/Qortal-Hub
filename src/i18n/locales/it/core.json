@@ -179,6 +179,18 @@
     "limit_reached": "numero massimo di schede raggiunto. Chiudine una per aprirne un'altra.",
     "locked_kept_open": "le schede bloccate restano aperte. Chiudile una alla volta per confermare."
   },
+  "apps_bar": {
+    "empty": "Fissa un’app o aggiungi un segnalibro e comparirà qui.",
+    "label": "App fissate e segnalibri",
+    "more": "Mostra il resto",
+    "rename_hint": "Lascialo vuoto per mostrare solo l’immagine.",
+    "rename_tip": "Fai clic destro su un elemento della barra per rinominarlo.",
+    "rename_title": "Rinomina nella barra",
+    "reset_name": "Usa il suo nome",
+    "show": "Mostra nella barra del titolo",
+    "show_hint": "Le tue app fissate e i tuoi segnalibri, lungo la parte superiore della finestra.",
+    "show_names": "Mostra i nomi"
+  },
   "apps_dashboard": "dashboard delle app",
   "apps_official": "app ufficiali",
   "aria": {
@@ -213,11 +225,14 @@
     "new_folder": "Nuova cartella",
     "no_bookmarks": "Nessun segnalibro.",
     "no_bookmarks_folder": "Nessun segnalibro in questa cartella.",
+    "no_bookmarks_hint": "Apri una pagina e usa «Aggiungi pagina» per tenerla qui.",
+    "open_folder": "Apri cartella",
     "qortal_link": "Link Qortal",
     "qortal_link_placeholder": "qortal://APP/Nome/percorso",
     "remove": "Rimuovi",
     "rename": "Rinomina",
     "save_location_without_query": "Salva una posizione Q-App senza parametri di query.",
+    "search": "Cerca nei segnalibri",
     "title": "Segnalibri",
     "top_level": "Livello principale"
   },
@@ -454,7 +469,11 @@
     "pinned_empty": "non c’è ancora nulla di fissato. Fissa un’app dalla libreria qui sotto per tenerla qui.",
     "pinned_hint": "trascina per riordinare · rilascia un’app su un’altra per creare una cartella · clic destro per altre opzioni",
     "results_apps": "app e siti web",
-    "results_saved": "le tue app fissate e i segnalibri"
+    "results_saved": "le tue app fissate e i segnalibri",
+    "save_later": "non ora",
+    "save_retry": "riprova",
+    "save_text": "le tue app fissate, i segnalibri e le cartelle, disposti così, su ogni dispositivo in cui accedi.",
+    "save_title": "salvare questa disposizione su QDN?"
   },
   "level": "livello",
   "library": "libreria",
@@ -873,15 +892,15 @@
     "wallets": "Wallet"
   },
   "quitter_feed": {
-    "empty_message_no_following": "Sfoglia Quitter e segui account per costruire il tuo feed.",
+    "empty_message_no_following": "Sfoglia {{app}} e segui account per costruire il tuo feed.",
     "empty_message_no_name": "Accedi con un nome Qortal per creare un feed personalizzato.",
-    "empty_message_no_posts": "Gli account che segui non hanno ancora pubblicato su Quitter.",
+    "empty_message_no_posts": "Gli account che segui non hanno ancora pubblicato su {{app}}.",
     "empty_title_general": "Nessun post disponibile",
     "empty_title_no_following": "Sembra che tu non segua ancora nessuno.",
     "empty_title_no_name": "Accedi per personalizzare il feed",
     "empty_title_no_posts": "Nessun post dagli account che segui",
-    "error_following": "Il feed Quitter personalizzato è temporaneamente non disponibile. Riprova.",
-    "error_generic": "Il feed pubblico Quitter è temporaneamente non disponibile. Riprova fra un momento.",
+    "error_following": "Il feed {{app}} personalizzato è temporaneamente non disponibile. Riprova.",
+    "error_generic": "Il feed pubblico {{app}} è temporaneamente non disponibile. Riprova fra un momento.",
     "error_timeout": "Caricamento del feed non riuscito. Puoi riprovare o tornare a Generale.",
     "error_title_following": "Caricamento feed non riuscito",
     "error_title_general": "Impossibile caricare i post",

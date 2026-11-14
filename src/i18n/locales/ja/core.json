@@ -179,6 +179,18 @@
     "limit_reached": "タブの最大数に達しました。別のタブを開くには、いずれかを閉じてください。",
     "locked_kept_open": "ロックされたタブは開いたままです。確認するには、1つずつ閉じてください。"
   },
+  "apps_bar": {
+    "empty": "アプリをピン留めするかブックマークを追加すると、ここに表示されます。",
+    "label": "ピン留めしたアプリとブックマーク",
+    "more": "残りを表示",
+    "rename_hint": "空にすると画像だけが表示されます。",
+    "rename_tip": "バーの項目を右クリックすると名前を変更できます。",
+    "rename_title": "バーでの名前を変更",
+    "reset_name": "元の名前を使う",
+    "show": "タイトルバーに表示",
+    "show_hint": "ピン留めしたアプリとブックマークをウィンドウ上部に並べます。",
+    "show_names": "名前を表示"
+  },
   "apps_dashboard": "アプリダッシュボード",
   "apps_official": "公式アプリ",
   "aria": {
@@ -213,11 +225,14 @@
     "new_folder": "新しいフォルダー",
     "no_bookmarks": "ブックマークはまだありません。",
     "no_bookmarks_folder": "このフォルダーにブックマークはありません。",
+    "no_bookmarks_hint": "ページを開き、「ページを追加」でここに保存できます。",
+    "open_folder": "フォルダーを開く",
     "qortal_link": "Qortal リンク",
     "qortal_link_placeholder": "qortal://APP/名前/パス",
     "remove": "削除",
     "rename": "名前を変更",
     "save_location_without_query": "クエリパラメータなしで Q-App の場所を保存します。",
+    "search": "ブックマークを検索",
     "title": "ブックマーク",
     "top_level": "トップレベル"
   },
@@ -454,7 +469,11 @@
     "pinned_empty": "まだ何もピン留めされていません。下のライブラリからアプリをピン留めすると、ここに表示されます。",
     "pinned_hint": "ドラッグで並べ替え・アプリを別のアプリに重ねるとフォルダーを作成・右クリックでその他の操作",
     "results_apps": "アプリとWebサイト",
-    "results_saved": "ピン留めしたアプリとブックマーク"
+    "results_saved": "ピン留めしたアプリとブックマーク",
+    "save_later": "今はしない",
+    "save_retry": "再試行",
+    "save_text": "ピン留めしたアプリ、ブックマーク、フォルダーが、この並びのまま、サインインするすべての端末に表示されます。",
+    "save_title": "このレイアウトをQDNに保存しますか？"
   },
   "level": "レベル",
   "library": "図書館",
@@ -873,15 +892,15 @@
     "wallets": "ウォレット"
   },
   "quitter_feed": {
-    "empty_message_no_following": "Quitter を見てアカウントをフォローし、フィードを作りましょう。",
+    "empty_message_no_following": "{{app}} を見てアカウントをフォローし、フィードを作りましょう。",
     "empty_message_no_name": "パーソナライズされたフィードを作るには Qortal 名でサインインしてください。",
-    "empty_message_no_posts": "フォロー中のアカウントはまだ Quitter に投稿していません。",
+    "empty_message_no_posts": "フォロー中のアカウントはまだ {{app}} に投稿していません。",
     "empty_title_general": "投稿がありません",
     "empty_title_no_following": "まだ誰もフォローしていないようです。",
     "empty_title_no_name": "フィードをパーソナライズするにはサインインしてください",
     "empty_title_no_posts": "フォロー中のアカウントの投稿はありません",
-    "error_following": "パーソナライズされた Quitter フィードは一時的に利用できません。もう一度お試しください。",
-    "error_generic": "公開の Quitter フィードは一時的に利用できません。しばらくしてからもう一度お試しください。",
+    "error_following": "パーソナライズされた {{app}} フィードは一時的に利用できません。もう一度お試しください。",
+    "error_generic": "公開の {{app}} フィードは一時的に利用できません。しばらくしてからもう一度お試しください。",
     "error_timeout": "フィードの読み込みに失敗しました。再試行するか「一般」に戻れます。",
     "error_title_following": "フィードの読み込みに失敗しました",
     "error_title_general": "投稿を読み込めませんでした",
