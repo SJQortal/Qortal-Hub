@@ -230,6 +230,31 @@ describe('DesktopSideBar', () => {
     }
   });
 
+  it('opens from anywhere along the left edge when its handle is off', () => {
+    vi.useFakeTimers();
+    try {
+      renderPanel({ edgeHandle: false });
+      expect(screen.queryByLabelText('Move sidebar handle')).toBeNull();
+      const edge = document.querySelector(
+        '[data-side-panel-edge="edge"]'
+      ) as HTMLElement;
+      expect(edge).toHaveStyle({ bottom: '0px', top: '0px' });
+      const column = document.querySelector(
+        '[data-side-panel="hover"]'
+      ) as HTMLElement;
+      expect(column).toHaveStyle({ pointerEvents: 'none' });
+
+      fireEvent.mouseEnter(edge);
+      act(() => {
+        vi.advanceTimersByTime(10);
+      });
+
+      expect(column).toHaveStyle({ pointerEvents: 'auto' });
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it('opens its editor', () => {
     renderPanel();
     fireEvent.click(screen.getByRole('button', { name: 'Edit side panel' }));

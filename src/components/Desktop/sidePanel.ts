@@ -49,6 +49,11 @@ export type SidePanelSettings = {
   background: number;
   /** The buttons' size: 1 as designed, a bit smaller or bigger. */
   buttonSize: number;
+  /**
+   * The handle at the left edge that opens the panel. Without it, the whole
+   * left edge does.
+   */
+  edgeHandle: boolean;
   /** The edge handle's height, in px. */
   handleHeight: number;
   /** How much of the edge handle's fill shows: 0 (its outline only) to 1. */
@@ -100,6 +105,7 @@ export const SIDE_PANEL_DEFAULT: SidePanelSettings = {
   layout: 'bar',
   background: 1,
   buttonSize: 1,
+  edgeHandle: true,
   handleHeight: 96,
   handleBackground: 1,
   items: SIDE_PANEL_BUILT_INS.map((kind) => ({ kind })),
@@ -173,6 +179,7 @@ export const normalizeSidePanel = (value: unknown): SidePanelSettings => {
   const {
     background,
     buttonSize,
+    edgeHandle,
     handleBackground,
     handleHeight,
     items,
@@ -218,6 +225,7 @@ export const normalizeSidePanel = (value: unknown): SidePanelSettings => {
       SIDE_PANEL_BUTTON_SIZES,
       SIDE_PANEL_DEFAULT.buttonSize
     ),
+    edgeHandle: edgeHandle !== false,
     handleHeight: toSidePanelStep(
       handleHeight,
       SIDE_PANEL_HANDLE_HEIGHTS,
@@ -240,6 +248,7 @@ export const sameSidePanel = (a: SidePanelSettings, b: SidePanelSettings) =>
   a.layout === b.layout &&
   a.background === b.background &&
   a.buttonSize === b.buttonSize &&
+  a.edgeHandle === b.edgeHandle &&
   a.handleHeight === b.handleHeight &&
   a.handleBackground === b.handleBackground &&
   a.items.length === b.items.length &&

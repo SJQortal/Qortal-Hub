@@ -148,6 +148,18 @@ describe('sizes', () => {
     expect(toSidePanelStep(undefined, SIDE_PANEL_BUTTON_SIZES, 1)).toBe(1);
   });
 
+  it('shows the edge handle unless it was switched off', () => {
+    expect(normalizeSidePanel({ items: [] }).edgeHandle).toBe(true);
+    expect(normalizeSidePanel({ edgeHandle: false }).edgeHandle).toBe(false);
+    expect(normalizeSidePanel({ edgeHandle: 'no' }).edgeHandle).toBe(true);
+    expect(
+      sameSidePanel(
+        { ...SIDE_PANEL_DEFAULT, edgeHandle: false },
+        SIDE_PANEL_DEFAULT
+      )
+    ).toBe(false);
+  });
+
   it('counts a new size as a change', () => {
     for (const change of [
       { buttonSize: 1.1 },
