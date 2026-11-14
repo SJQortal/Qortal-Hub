@@ -76,8 +76,9 @@ const errorOf = (reason: unknown, fallback: string) => {
  * - Settings saved on another device since they were read here are taken
  *   in first, so they are not written over: their bookmarks and arrangement
  *   are taken in, and the pins they hold are added to this device's own, so
- *   an app pinned there is not removed by saving a change made here. With
- *   `overwrite`, settings that could not be read are written over.
+ *   an app pinned there is not removed by saving a change made here. They
+ *   also become what Revert goes back to, even if this save is called off.
+ *   With `overwrite`, settings that could not be read are written over.
  * - It asks to confirm, with the fee, before it publishes. `canceled` means
  *   that was declined; a failure throws, with a message to show.
  */
@@ -113,24 +114,26 @@ export const useSaveSettingsToQdn = (
           // Settings that cannot be read are not written over unasked.
           if (!settings) throw new Error(failure);
           await takeIn(address, { settings, savedAt: record.timestamp });
-          // An app pinned on another device is kept: it would otherwise be
-          // removed by publishing this device's older list.
-          const merged = mergePinnedApps(
-            pins,
-            removeBrokenPinnedApps(
-              (settings as { sortablePinnedApps?: PinnedApp[] })
-                ?.sortablePinnedApps
-            )
-          );
-          if (merged.length !== pins.length) {
-            pins = merged;
-            setPinnedApps(merged);
-            // Kept here too, so the next sign-in starts from the whole list.
-            saveToLocalStorage(
-              PINNED_APPS_STORAGE_KEY,
-              'sortablePinnedApps',
-              merged
-            );
+          const theirPins = (settings as { sortablePinnedApps?: PinnedApp[] })
+            ?.sortablePinnedApps;
+          if (Array.isArray(theirPins)) {
+            const saved = removeBrokenPinnedApps(theirPins);
+            // The list QDN holds now, so Revert goes back to that and not to
+            // the one read at sign-in, which has none of its pins.
+            setOldPinnedApps(saved);
+            // An app pinned on another device is kept: it would otherwise be
+            // removed by publishing this device's older list.
+            const merged = mergePinnedApps(pins, saved);
+            if (merged.length !== pins.length) {
+              pins = merged;
+              setPinnedApps(merged);
+              // Kept here too, so the next sign-in starts from the whole list.
+              saveToLocalStorage(
+                PINNED_APPS_STORAGE_KEY,
+                'sortablePinnedApps',
+                merged
+              );
+            }
           }
         }
       }

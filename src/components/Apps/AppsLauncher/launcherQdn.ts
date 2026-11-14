@@ -233,7 +233,9 @@ const folderNameKey = (name: string) => name.trim().toLocaleLowerCase();
  * - A folder here with the name of a saved folder becomes that folder.
  * - A bookmark of a place that has a saved bookmark is left out: the
  *   bookmarks menu keeps one bookmark per place.
- * - The order is the saved order, then what only this device has.
+ * - The arrangement is this device's own, then the tiles only the saved one
+ *   has: what was arranged here was never saved, and is what the user last
+ *   did on this device.
  */
 export function mergeSavedLauncher(
   local: { data: AppBookmarksForAddress; order: string[] },
@@ -285,14 +287,17 @@ export function mergeSavedLauncher(
       folderItemKey(to),
     ])
   );
-  const order = [...saved.order];
-  const inOrder = new Set(order);
-  for (const key of local.order) {
-    const next = renamedKeys.get(key) ?? key;
-    if (inOrder.has(next)) continue;
-    order.push(next);
-    inOrder.add(next);
-  }
+  const order: string[] = [];
+  const inOrder = new Set<string>();
+  const place = (key: string) => {
+    if (inOrder.has(key)) return;
+    order.push(key);
+    inOrder.add(key);
+  };
+  // This device's arrangement first, so a tile moved here stays where it was
+  // put; a tile only the saved arrangement has goes after it.
+  for (const key of local.order) place(renamedKeys.get(key) ?? key);
+  for (const key of saved.order) place(key);
 
   return { data: { folders, bookmarks, updatedAt: now }, order };
 }

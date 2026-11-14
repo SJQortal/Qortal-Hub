@@ -268,8 +268,23 @@ describe('merging what was saved with what is here', () => {
       'b2',
     ]);
     expect(merged.data.bookmarks[1].folderId).toBe('f2');
-    expect(merged.order).toEqual(['folder:f1', 'folder:f2', 'APP-Q-Trade']);
+    // The arrangement is this device's own, with the saved tile after it.
+    expect(merged.order).toEqual(['folder:f2', 'APP-Q-Trade', 'folder:f1']);
     expect(merged.data.updatedAt).toBe(777);
+  });
+
+  it('keeps the arrangement made here when the saved one differs', () => {
+    // Two bookmarks saved as A then B, moved to B then A on this device,
+    // and the settings that arrive still say A then B.
+    const both = [bookmark('b1', 'Q-Tube'), bookmark('b2', 'Q-Mail')];
+
+    const merged = mergeSavedLauncher(
+      { data: data([], both), order: ['APP-Q-Mail', 'APP-Q-Tube'] },
+      savedOf([], both, ['APP-Q-Tube', 'APP-Q-Mail']),
+      777
+    );
+
+    expect(merged.order).toEqual(['APP-Q-Mail', 'APP-Q-Tube']);
   });
 
   it('makes two folders of the same name one, and moves its bookmarks', () => {

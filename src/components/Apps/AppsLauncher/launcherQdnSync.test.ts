@@ -159,9 +159,9 @@ describe('taking in the launcher saved on QDN', () => {
       stores
     );
 
-    // The tile this device had arranged stays, after the saved ones.
+    // The tile this device had arranged stays where it was put.
     expect(saved.view).toEqual({
-      order: ['folder:f1', 'APP-Q-Mail'],
+      order: ['APP-Q-Mail', 'folder:f1'],
       openFolders: ['f1'],
     });
   });
@@ -229,12 +229,12 @@ describe('taking in the launcher saved on QDN', () => {
       'Media',
       'Tools',
     ]);
-    expect(saved.view?.order).toEqual(['folder:f1', 'folder:f2']);
+    expect(saved.view?.order).toEqual(['folder:f2', 'folder:f1']);
     // The folder of this device has never been saved.
     expect(saved.mark).toEqual({
       savedAt: 120,
       localAt: 999,
-      order: ['folder:f1', 'folder:f2'],
+      order: ['folder:f2', 'folder:f1'],
       unsaved: true,
     });
   });
@@ -284,7 +284,30 @@ describe('taking in the launcher saved on QDN', () => {
     );
 
     expect(result.use).toBe('merge');
-    expect(saved.view?.order).toEqual(['folder:f1', 'APP-Q-Mail']);
+    expect(saved.view?.order).toEqual(['APP-Q-Mail', 'folder:f1']);
+  });
+
+  it('keeps the arrangement made here when the saved one differs', async () => {
+    // Saved as Q-Tube then Q-Mail and taken in; moved the other way round
+    // here; then settings arrive that still have the saved arrangement.
+    const both = [bookmark('b1', 'Q-Tube'), bookmark('b2', 'Q-Mail')];
+    const { saved, stores } = makeStores({
+      local: data([], both, 50),
+      mark: { savedAt: 90, localAt: 50, order: ['APP-Q-Tube', 'APP-Q-Mail'] },
+      view: { order: ['APP-Q-Mail', 'APP-Q-Tube'], openFolders: [] },
+    });
+
+    const result = await applySavedLauncher(
+      ADDRESS,
+      settingsOf(savedOf([], both, ['APP-Q-Tube', 'APP-Q-Mail'])),
+      120,
+      stores
+    );
+
+    expect(result.use).toBe('merge');
+    expect(saved.view?.order).toEqual(['APP-Q-Mail', 'APP-Q-Tube']);
+    // Still not saved, so the next update cannot undo it either.
+    expect(saved.mark?.unsaved).toBe(true);
   });
 
   it('has nothing unsaved when the merge kept nothing new', async () => {
