@@ -102,6 +102,7 @@ describe('readHomeLayout', () => {
     saveHomeLayout(ALICE, { hidden: ['qortino'], stack: ['feed', 'widgets'] });
 
     expect(readHomeLayout(ALICE)).toEqual({
+      changedAt: expect.any(Number),
       hidden: ['qortino'],
       stack: ['feed', 'widgets', 'groupActivity'],
     });
@@ -184,6 +185,7 @@ describe('useHomeLayout', () => {
     expect(
       JSON.parse(localStorage.getItem(homeLayoutStorageKey(ALICE)) ?? '{}')
     ).toEqual({
+      changedAt: expect.any(Number),
       hidden: ['featured'],
       stack: ['widgets', 'groupActivity', 'feed'],
     });
@@ -199,5 +201,24 @@ describe('useHomeLayout', () => {
     });
     expect(setItem).not.toHaveBeenCalled();
     setItem.mockRestore();
+  });
+});
+
+describe('when the layout changed', () => {
+  it('marks a change, and only a change, with its time', () => {
+    const now = vi.spyOn(Date, 'now').mockReturnValue(1_000);
+    saveHomeLayout(ALICE, { hidden: ['qortino'], stack: [] });
+    expect(readHomeLayout(ALICE).changedAt).toBe(1_000);
+
+    now.mockReturnValue(2_000);
+    saveHomeLayout(ALICE, readHomeLayout(ALICE));
+    expect(readHomeLayout(ALICE).changedAt).toBe(1_000);
+
+    saveHomeLayout(ALICE, { hidden: [], stack: [] });
+    expect(readHomeLayout(ALICE).changedAt).toBe(2_000);
+
+    saveHomeLayout(ALICE, { hidden: ['feed'], stack: [] }, { changedAt: 500 });
+    expect(readHomeLayout(ALICE).changedAt).toBe(500);
+    now.mockRestore();
   });
 });

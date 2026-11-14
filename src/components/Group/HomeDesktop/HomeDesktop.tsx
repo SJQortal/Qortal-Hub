@@ -2,7 +2,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import OpenInNewRoundedIcon from '@mui/icons-material/OpenInNewRounded';
 import ForumRoundedIcon from '@mui/icons-material/ForumRounded';
 import { alpha } from '@mui/material/styles';
-import { Activity, useCallback, useMemo, useState } from 'react';
+import { Activity, useCallback, useMemo, useRef, useState } from 'react';
 import ErrorBoundary from '../../../common/ErrorBoundary';
 import { Spacer } from '../../../common/Spacer';
 import { HomeProfileCard } from '../HomeProfileCard';
@@ -52,6 +52,8 @@ import {
 } from './homeLayout';
 import { HOME_WINDOW_IDS, type HomeWindowId } from './homeGrid';
 import { HomeGrid, type HomeGridWindow } from './HomeGrid';
+import { RestoreLayoutButton } from '../../Save/RestoreLayoutButton';
+import { LAYOUT_EDIT_DONE_EVENT } from '../../Save/LayoutSavePrompt';
 import { homeWalletRailRect, useHomeWindowTitles } from './homeWindows';
 
 export const HomeDesktop = ({
@@ -83,6 +85,7 @@ export const HomeDesktop = ({
   const theme = useTheme();
   const titles = useHomeWindowTitles();
   const homeActive = desktopViewMode === 'home';
+  const wasEditingHomeRef = useRef(false);
 
   const handleOpenReceiveQort = useCallback(
     (target: HTMLElement | null) => {
@@ -288,6 +291,7 @@ export const HomeDesktop = ({
           >
             <HomeGrid
               active={homeActive}
+              editActions={<RestoreLayoutButton part="homeLayout" />}
               grid={grid}
               headerEnd={
                 <Box sx={headerLabelSx}>
@@ -303,6 +307,13 @@ export const HomeDesktop = ({
               onChangeGrid={(next) =>
                 updateHomeLayout((current) => ({ ...current, grid: next }))
               }
+              onEditingChange={(editing) => {
+                // Done editing: the layout may be worth saving to QDN.
+                if (wasEditingHomeRef.current && !editing) {
+                  executeEvent(LAYOUT_EDIT_DONE_EVENT, {});
+                }
+                wasEditingHomeRef.current = editing;
+              }}
               onHideWindow={(id) => {
                 if (id === 'account') return;
                 updateHomeLayout((current) =>

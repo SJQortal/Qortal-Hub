@@ -100,6 +100,10 @@ type HomeGridProps = {
   hiddenWindows: readonly { id: HomeWindowId; title: string }[];
   onChangeGrid: (grid: HomeGridItem[]) => void;
   onHideWindow: (id: HomeWindowId) => void;
+  /** More buttons in the edit toolbar (restoring the layout saved on QDN). */
+  editActions?: ReactNode;
+  /** Edit Home started or stopped. */
+  onEditingChange?: (editing: boolean) => void;
   onResetGrid: () => void;
   onShowWindow: (id: HomeWindowId) => void;
   /** The windows shown, in any order. */
@@ -135,11 +139,13 @@ const scrollParentOf = (node: HTMLElement | null): HTMLElement | null => {
  */
 export const HomeGrid = ({
   active,
+  editActions,
   grid,
   headerEnd,
   headerStart,
   hiddenWindows,
   onChangeGrid,
+  onEditingChange,
   onHideWindow,
   onResetGrid,
   onShowWindow,
@@ -252,6 +258,11 @@ export const HomeGrid = ({
     subscribeToEvent(HOME_EDIT_LAYOUT_EVENT, start);
     return () => unsubscribeFromEvent(HOME_EDIT_LAYOUT_EVENT, start);
   }, []);
+  const onEditingChangeRef = useRef(onEditingChange);
+  onEditingChangeRef.current = onEditingChange;
+  useEffect(() => {
+    onEditingChangeRef.current?.(editing);
+  }, [editing]);
   useEffect(() => {
     if (!editing || menuAnchor) return;
     const onKeyDown = (event: KeyboardEvent) => {
@@ -617,6 +628,7 @@ export const HomeGrid = ({
       <Box sx={{ alignItems: 'center', display: 'flex', gap: 1 }}>
         {editing ? (
           <>
+            {editActions}
             <Button
               aria-haspopup="menu"
               disabled={hiddenWindows.length === 0}

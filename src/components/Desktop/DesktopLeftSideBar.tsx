@@ -29,6 +29,8 @@ import { NodeStateLogo } from './NodeStateLogo';
 import { useNodeState } from './nodeState';
 import { SidePanelAppIcon } from './SidePanelAppIcon';
 import { SidePanelEditor } from './SidePanelEditor';
+import { RestoreLayoutButton } from '../Save/RestoreLayoutButton';
+import { LAYOUT_EDIT_DONE_EVENT } from '../Save/LayoutSavePrompt';
 import {
   isSidePanelItemShown,
   SIDE_PANEL_DEFAULT,
@@ -857,9 +859,12 @@ export const DesktopSideBar = ({
 
       <SidePanelEditor
         devMode={!!isEnabledDevMode}
+        extraActions={<RestoreLayoutButton part="sidePanel" />}
         onChange={updatePanel}
         onClose={() => {
           setIsEditorOpen(false);
+          // The settings may be worth saving to QDN.
+          executeEvent(LAYOUT_EDIT_DONE_EVENT, {});
           if (!alwaysOpen) hideSidebar();
         }}
         open={isEditorOpen}

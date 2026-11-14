@@ -73,6 +73,8 @@ type SidePanelEditorProps = {
   onChange: (change: (current: SidePanelSettings) => SidePanelSettings) => void;
   /** Dev mode's button is only listed while dev mode is on. */
   devMode: boolean;
+  /** More buttons by Reset (restoring the settings saved on QDN). */
+  extraActions?: ReactNode;
 };
 
 const ADD_SUGGESTIONS = 8;
@@ -90,6 +92,7 @@ export const SidePanelEditor = ({
   settings,
   onChange,
   devMode,
+  extraActions,
 }: SidePanelEditorProps) => {
   const theme = useTheme();
   const { t } = useTranslation(['core']);
@@ -565,17 +568,20 @@ export const SidePanelEditor = ({
         </Box>
       </DialogContent>
       <DialogActions sx={{ justifyContent: 'space-between', px: 3, pb: 2 }}>
-        <Button
-          onClick={() =>
-            onChange(() => ({
-              ...SIDE_PANEL_DEFAULT,
-              items: [...SIDE_PANEL_DEFAULT.items],
-            }))
-          }
-          sx={{ textTransform: 'none' }}
-        >
-          {t('core:side_panel.reset', { postProcess: 'capitalizeFirstChar' })}
-        </Button>
+        <Box sx={{ alignItems: 'center', display: 'flex', gap: 0.5 }}>
+          <Button
+            onClick={() =>
+              onChange(() => ({
+                ...SIDE_PANEL_DEFAULT,
+                items: [...SIDE_PANEL_DEFAULT.items],
+              }))
+            }
+            sx={{ textTransform: 'none' }}
+          >
+            {t('core:side_panel.reset', { postProcess: 'capitalizeFirstChar' })}
+          </Button>
+          {extraActions}
+        </Box>
         <Button
           onClick={onClose}
           sx={{
