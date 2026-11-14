@@ -457,7 +457,11 @@
     "pinned_empty": "nothing is pinned yet. Pin an app from the library below to keep it here.",
     "pinned_hint": "drag to reorder · drop one app on another to make a folder · right-click for more",
     "results_apps": "apps and websites",
-    "results_saved": "your pins and bookmarks"
+    "results_saved": "your pins and bookmarks",
+    "save_later": "not now",
+    "save_retry": "try again",
+    "save_text": "your pinned apps, bookmarks and folders, arranged like this, on every device you sign in on.",
+    "save_title": "save this layout to QDN?"
   },
   "level": "level",
   "library": "library",
@@ -717,6 +721,7 @@
   "name": "name",
   "name_app": "name/App",
   "navbar": {
+    "search_library": "Search Q-Apps for “{{query}}”",
     "search_placeholder": "Search Q-Apps or enter qortal://",
     "session": {
       "lock_description": "Keep chats and calls connected",
@@ -725,7 +730,12 @@
       "logout_title": "Log out",
       "menu_aria": "Session options",
       "tooltip": "Lock or log out"
-    }
+    },
+    "suggestion_type": {
+      "app": "Q-App",
+      "website": "Website"
+    },
+    "suggestions": "Suggestions"
   },
   "new_post_in": "new post in {{ title }}",
   "none": "none",
@@ -870,15 +880,15 @@
     "wallets": "Wallets"
   },
   "quitter_feed": {
-    "empty_message_no_following": "Browse Quitter and follow accounts to build your feed.",
+    "empty_message_no_following": "Browse {{app}} and follow accounts to build your feed.",
     "empty_message_no_name": "Sign in with a Qortal name to build a personalized feed.",
-    "empty_message_no_posts": "The accounts you follow haven’t posted to Quitter yet.",
+    "empty_message_no_posts": "The accounts you follow haven’t posted to {{app}} yet.",
     "empty_title_general": "No posts available",
     "empty_title_no_following": "It looks like you’re not following anyone yet.",
     "empty_title_no_name": "Sign in to personalize your feed",
     "empty_title_no_posts": "No followed posts available",
-    "error_following": "The personalized Quitter feed is temporarily unavailable. Please try again.",
-    "error_generic": "The public Quitter feed is temporarily unavailable. Give it another try in a moment.",
+    "error_following": "The personalized {{app}} feed is temporarily unavailable. Please try again.",
+    "error_generic": "The public {{app}} feed is temporarily unavailable. Give it another try in a moment.",
     "error_timeout": "Feed load failed. You can try again or return to General.",
     "error_title_following": "Feed load failed",
     "error_title_general": "Unable to load posts",
