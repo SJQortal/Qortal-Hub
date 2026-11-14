@@ -326,6 +326,8 @@ export const DesktopSideBar = ({
   const buttonSize = panel.buttonSize;
   const panelWidth = Math.round(SIDEBAR_WIDTH_PX * buttonSize);
   const handleHeight = panel.handleHeight;
+  // Without the handle, the whole left edge opens the panel.
+  const edgeHandle = panel.edgeHandle;
   const [nudgeTop, setNudgeTop] = useState(() =>
     readSidebarNudgeTop(handleHeight)
   );
@@ -731,16 +733,22 @@ export const DesktopSideBar = ({
         />
       ) : (
         <Box
+          data-side-panel-edge={edgeHandle ? 'handle' : 'edge'}
           onMouseEnter={showSidebar}
           sx={{
             position: 'fixed',
             left: 0,
-            top: `${clampSidebarNudgeTop(
-              nudgeTop - EDGE_SENSOR_EXTRA_PX / 2,
-              viewportHeight,
-              handleHeight + EDGE_SENSOR_EXTRA_PX
-            )}px`,
-            height: `${handleHeight + EDGE_SENSOR_EXTRA_PX}px`,
+            // Around the handle, or all along the edge without it.
+            ...(edgeHandle
+              ? {
+                  top: `${clampSidebarNudgeTop(
+                    nudgeTop - EDGE_SENSOR_EXTRA_PX / 2,
+                    viewportHeight,
+                    handleHeight + EDGE_SENSOR_EXTRA_PX
+                  )}px`,
+                  height: `${handleHeight + EDGE_SENSOR_EXTRA_PX}px`,
+                }
+              : { top: 0, bottom: 0 }),
             width: `${EDGE_SENSOR_WIDTH_PX}px`,
             opacity: 0,
             pointerEvents: isVisible ? 'none' : 'auto',
@@ -858,7 +866,7 @@ export const DesktopSideBar = ({
         settings={panel}
       />
 
-      {alwaysOpen ? null : (
+      {alwaysOpen || !edgeHandle ? null : (
         <Box
           aria-label="Move sidebar handle"
           onMouseEnter={showSidebarImmediate}

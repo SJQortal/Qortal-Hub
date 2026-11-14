@@ -302,59 +302,82 @@ export const SidePanelEditor = ({
             <Typography id="side-panel-handle" sx={sectionTitleSx}>
               {t('core:side_panel.handle')}
             </Typography>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={settings.edgeHandle}
+                  onChange={(_event, checked) =>
+                    onChange((current) => ({ ...current, edgeHandle: checked }))
+                  }
+                  size="small"
+                />
+              }
+              label={t('core:side_panel.handle_show', {
+                postProcess: 'capitalizeFirstChar',
+              })}
+            />
             <Typography sx={{ ...rowLabelSx, mb: 1 }}>
-              {t('core:side_panel.handle_hint')}
+              {settings.edgeHandle
+                ? t('core:side_panel.handle_hint')
+                : t('core:side_panel.handle_off_hint')}
             </Typography>
-            <Typography id="side-panel-handle-height" sx={{ ...rowLabelSx }}>
-              {t('core:side_panel.handle_height', {
-                postProcess: 'capitalizeFirstChar',
-              })}
-            </Typography>
-            <RangeRow
-              end={t('core:side_panel.handle_taller', {
-                postProcess: 'capitalizeFirstChar',
-              })}
-              format={(value) => `${value} px`}
-              labelledBy="side-panel-handle side-panel-handle-height"
-              max={SIDE_PANEL_HANDLE_HEIGHTS.max}
-              min={SIDE_PANEL_HANDLE_HEIGHTS.min}
-              onChange={(value) =>
-                onChange((current) => ({ ...current, handleHeight: value }))
-              }
-              start={t('core:side_panel.handle_shorter', {
-                postProcess: 'capitalizeFirstChar',
-              })}
-              step={SIDE_PANEL_HANDLE_HEIGHTS.step}
-              value={settings.handleHeight}
-            />
-            <Typography
-              id="side-panel-handle-background"
-              sx={{ ...rowLabelSx, mt: 0.5 }}
-            >
-              {t('core:side_panel.background', {
-                postProcess: 'capitalizeFirstChar',
-              })}
-            </Typography>
-            <RangeRow
-              end={t('core:side_panel.background_full', {
-                postProcess: 'capitalizeFirstChar',
-              })}
-              format={percent}
-              labelledBy="side-panel-handle side-panel-handle-background"
-              max={100}
-              min={0}
-              onChange={(value) =>
-                onChange((current) => ({
-                  ...current,
-                  handleBackground: value / 100,
-                }))
-              }
-              start={t('core:side_panel.handle_outline', {
-                postProcess: 'capitalizeFirstChar',
-              })}
-              step={5}
-              value={Math.round(settings.handleBackground * 100)}
-            />
+            {settings.edgeHandle ? (
+              <>
+                <Typography
+                  id="side-panel-handle-height"
+                  sx={{ ...rowLabelSx }}
+                >
+                  {t('core:side_panel.handle_height', {
+                    postProcess: 'capitalizeFirstChar',
+                  })}
+                </Typography>
+                <RangeRow
+                  end={t('core:side_panel.handle_taller', {
+                    postProcess: 'capitalizeFirstChar',
+                  })}
+                  format={(value) => `${value} px`}
+                  labelledBy="side-panel-handle side-panel-handle-height"
+                  max={SIDE_PANEL_HANDLE_HEIGHTS.max}
+                  min={SIDE_PANEL_HANDLE_HEIGHTS.min}
+                  onChange={(value) =>
+                    onChange((current) => ({ ...current, handleHeight: value }))
+                  }
+                  start={t('core:side_panel.handle_shorter', {
+                    postProcess: 'capitalizeFirstChar',
+                  })}
+                  step={SIDE_PANEL_HANDLE_HEIGHTS.step}
+                  value={settings.handleHeight}
+                />
+                <Typography
+                  id="side-panel-handle-background"
+                  sx={{ ...rowLabelSx, mt: 0.5 }}
+                >
+                  {t('core:side_panel.background', {
+                    postProcess: 'capitalizeFirstChar',
+                  })}
+                </Typography>
+                <RangeRow
+                  end={t('core:side_panel.background_full', {
+                    postProcess: 'capitalizeFirstChar',
+                  })}
+                  format={percent}
+                  labelledBy="side-panel-handle side-panel-handle-background"
+                  max={100}
+                  min={0}
+                  onChange={(value) =>
+                    onChange((current) => ({
+                      ...current,
+                      handleBackground: value / 100,
+                    }))
+                  }
+                  start={t('core:side_panel.handle_outline', {
+                    postProcess: 'capitalizeFirstChar',
+                  })}
+                  step={5}
+                  value={Math.round(settings.handleBackground * 100)}
+                />
+              </>
+            ) : null}
           </Box>
         ) : null}
 

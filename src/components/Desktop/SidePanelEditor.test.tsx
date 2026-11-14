@@ -137,6 +137,21 @@ describe('SidePanelEditor', () => {
     expect(lastSettings(onSettings).handleBackground).toBe(0);
   });
 
+  it('switches the edge handle off, so the whole edge opens the panel', () => {
+    const onSettings = renderEditor();
+
+    fireEvent.click(screen.getByRole('checkbox', { name: 'Show the handle' }));
+
+    expect(lastSettings(onSettings).edgeHandle).toBe(false);
+    expect(
+      screen.getByText(/the panel opens when the pointer reaches the left edge/)
+    ).toBeInTheDocument();
+    // Without a handle there is nothing to size.
+    expect(
+      screen.queryByRole('slider', { name: /edge handle height/i })
+    ).toBeNull();
+  });
+
   it('has no edge handle to set while the panel stays open', () => {
     renderEditor({ ...SIDE_PANEL_DEFAULT, show: 'always' });
     expect(screen.queryByRole('slider', { name: /edge handle/i })).toBeNull();
