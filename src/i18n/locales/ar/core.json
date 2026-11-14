@@ -179,6 +179,18 @@
     "limit_reached": "تم الوصول إلى الحد الأقصى لعدد علامات التبويب. أغلق واحدة لفتح أخرى.",
     "locked_kept_open": "تبقى علامات التبويب المقفلة مفتوحة. أغلق كل واحدة منها على حدة للتأكيد."
   },
+  "apps_bar": {
+    "empty": "ثبّت تطبيقًا أو أضف إشارة مرجعية، وستظهر هنا.",
+    "label": "التطبيقات المثبّتة والإشارات المرجعية",
+    "more": "عرض الباقي",
+    "rename_hint": "اتركه فارغًا لعرض الصورة فقط.",
+    "rename_tip": "انقر بالزر الأيمن على عنصر في الشريط لإعادة تسميته.",
+    "rename_title": "إعادة التسمية في الشريط",
+    "reset_name": "استخدام اسمه الأصلي",
+    "show": "العرض في شريط العنوان",
+    "show_hint": "تطبيقاتك المثبّتة وإشاراتك المرجعية، على طول أعلى النافذة.",
+    "show_names": "عرض الأسماء"
+  },
   "apps_dashboard": "لوحة التطبيقات",
   "apps_official": "تطبيقات رسمية",
   "aria": {
@@ -213,11 +225,14 @@
     "new_folder": "مجلد جديد",
     "no_bookmarks": "لا توجد إشارات بعد.",
     "no_bookmarks_folder": "لا توجد إشارات في هذا المجلد.",
+    "no_bookmarks_hint": "افتح صفحة واستخدم «إضافة الصفحة» لحفظها هنا.",
+    "open_folder": "فتح المجلد",
     "qortal_link": "رابط Qortal",
     "qortal_link_placeholder": "qortal://APP/Name/path",
     "remove": "إزالة",
     "rename": "إعادة تسمية",
     "save_location_without_query": "احفظ موقع Q-App بدون معاملات الاستعلام.",
+    "search": "البحث في الإشارات المرجعية",
     "title": "الإشارات المرجعية",
     "top_level": "المستوى الأعلى"
   },
@@ -441,6 +456,25 @@
   "image_embed": "تضمين صورة",
   "items_per_page": "عناصر لكل صفحة:",
   "last_height": "آخر ارتفاع",
+  "launcher": {
+    "bookmark_remove": "إزالة الإشارة المرجعية",
+    "clear_search": "مسح البحث",
+    "enter_opens": "اضغط Enter لفتح {{title}}",
+    "folder_delete": "حذف المجلد",
+    "folder_move_to": "نقل إلى مجلد",
+    "folder_remove_from": "إزالة من المجلد",
+    "no_matches": "لا شيء يطابق «{{query}}»",
+    "no_matches_hint": "جرّب اسمًا آخر، أو الصق رابط qortal://.",
+    "pinned_and_bookmarks": "التطبيقات المثبّتة والإشارات المرجعية",
+    "pinned_empty": "لا يوجد شيء مثبّت بعد. ثبّت تطبيقًا من المكتبة أدناه ليبقى هنا.",
+    "pinned_hint": "اسحب لإعادة الترتيب · أفلت تطبيقًا على آخر لإنشاء مجلد · انقر بالزر الأيمن للمزيد",
+    "results_apps": "التطبيقات والمواقع",
+    "results_saved": "تطبيقاتك المثبّتة وإشاراتك المرجعية",
+    "save_later": "ليس الآن",
+    "save_retry": "إعادة المحاولة",
+    "save_text": "تطبيقاتك المثبّتة وإشاراتك المرجعية ومجلداتك، بهذا الترتيب، على كل جهاز تسجّل الدخول منه.",
+    "save_title": "حفظ هذا التخطيط على QDN؟"
+  },
   "level": "مستوى",
   "library": "مكتبة",
   "list": {
@@ -699,6 +733,7 @@
   "name": "اسم",
   "name_app": "اسم/تطبيق",
   "navbar": {
+    "search_library": "ابحث في Q-Apps عن «{{query}}»",
     "search_placeholder": "ابحث في Q-Apps أو أدخل ‎qortal://‎",
     "session": {
       "lock_description": "إبقاء المحادثات والمكالمات متصلة",
@@ -707,7 +742,12 @@
       "logout_title": "تسجيل الخروج",
       "menu_aria": "خيارات الجلسة",
       "tooltip": "القفل أو تسجيل الخروج"
-    }
+    },
+    "suggestion_type": {
+      "app": "Q-App",
+      "website": "موقع ويب"
+    },
+    "suggestions": "اقتراحات"
   },
   "new_post_in": "منشور جديد في {{ title }}",
   "none": "لا شيء",
@@ -852,15 +892,15 @@
     "wallets": "المحافظ"
   },
   "quitter_feed": {
-    "empty_message_no_following": "تصفّح Quitter وتابع الحسابات لبناء موجزك.",
+    "empty_message_no_following": "تصفّح {{app}} وتابع الحسابات لبناء موجزك.",
     "empty_message_no_name": "سجّل الدخول باسم Qortal لبناء موجز مخصّص.",
-    "empty_message_no_posts": "الحسابات التي تتابعها لم تنشر على Quitter بعد.",
+    "empty_message_no_posts": "الحسابات التي تتابعها لم تنشر على {{app}} بعد.",
     "empty_title_general": "لا منشورات متاحة",
     "empty_title_no_following": "يبدو أنك لا تتابع أحدًا بعد.",
     "empty_title_no_name": "سجّل الدخول لتخصيص موجزك",
     "empty_title_no_posts": "لا منشورات من الحسابات التي تتابعها",
-    "error_following": "موجز Quitter المخصّص غير متاح مؤقتًا. يُرجى إعادة المحاولة.",
-    "error_generic": "موجز Quitter العام غير متاح مؤقتًا. أعِد المحاولة بعد لحظة.",
+    "error_following": "موجز {{app}} المخصّص غير متاح مؤقتًا. يُرجى إعادة المحاولة.",
+    "error_generic": "موجز {{app}} العام غير متاح مؤقتًا. أعِد المحاولة بعد لحظة.",
     "error_timeout": "فشل تحميل الموجز. يمكنك إعادة المحاولة أو العودة إلى العام.",
     "error_title_following": "فشل تحميل الموجز",
     "error_title_general": "تعذّر تحميل المنشورات",

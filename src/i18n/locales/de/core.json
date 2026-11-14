@@ -179,6 +179,18 @@
     "limit_reached": "maximale Anzahl an Tabs erreicht. Schließe einen, um einen weiteren zu öffnen.",
     "locked_kept_open": "gesperrte Tabs bleiben offen. Schließe jeden einzeln, um es zu bestätigen."
   },
+  "apps_bar": {
+    "empty": "Heften Sie eine App an oder fügen Sie ein Lesezeichen hinzu, dann erscheint es hier.",
+    "label": "Angeheftete Apps und Lesezeichen",
+    "more": "Rest anzeigen",
+    "rename_hint": "Leer lassen, um nur das Bild zu zeigen.",
+    "rename_tip": "Klicken Sie mit der rechten Maustaste auf einen Eintrag in der Leiste, um ihn umzubenennen.",
+    "rename_title": "In der Leiste umbenennen",
+    "reset_name": "Eigenen Namen verwenden",
+    "show": "In der Titelleiste anzeigen",
+    "show_hint": "Ihre angehefteten Apps und Lesezeichen, oben am Fenster entlang.",
+    "show_names": "Namen anzeigen"
+  },
   "apps_dashboard": "Apps Dashboard",
   "apps_official": "offizielle Apps",
   "aria": {
@@ -213,11 +225,14 @@
     "new_folder": "Neuer Ordner",
     "no_bookmarks": "Noch keine Lesezeichen.",
     "no_bookmarks_folder": "Keine Lesezeichen in diesem Ordner.",
+    "no_bookmarks_hint": "Öffnen Sie eine Seite und legen Sie sie mit „Seite hinzufügen“ hier ab.",
+    "open_folder": "Ordner öffnen",
     "qortal_link": "Qortal-Link",
     "qortal_link_placeholder": "qortal://APP/Name/Pfad",
     "remove": "Entfernen",
     "rename": "Umbenennen",
     "save_location_without_query": "Speichere einen Q-App-Ort ohne Abfrageparameter.",
+    "search": "Lesezeichen durchsuchen",
     "title": "Lesezeichen",
     "top_level": "Oberste Ebene"
   },
@@ -441,6 +456,25 @@
   "image_embed": "Bildbett",
   "items_per_page": "Einträge pro Seite:",
   "last_height": "letzte Höhe",
+  "launcher": {
+    "bookmark_remove": "Lesezeichen entfernen",
+    "clear_search": "Suche leeren",
+    "enter_opens": "Enter drücken, um {{title}} zu öffnen",
+    "folder_delete": "Ordner löschen",
+    "folder_move_to": "in Ordner verschieben",
+    "folder_remove_from": "aus dem Ordner entfernen",
+    "no_matches": "nichts passt zu „{{query}}“",
+    "no_matches_hint": "versuche einen anderen Namen oder füge einen qortal://-Link ein.",
+    "pinned_and_bookmarks": "angeheftete Apps und Lesezeichen",
+    "pinned_empty": "noch nichts angeheftet. Hefte eine App aus der Bibliothek unten an, damit sie hier bleibt.",
+    "pinned_hint": "ziehen zum Umsortieren · eine App auf eine andere ziehen, um einen Ordner zu erstellen · Rechtsklick für mehr",
+    "results_apps": "Apps und Webseiten",
+    "results_saved": "deine angehefteten Apps und Lesezeichen",
+    "save_later": "nicht jetzt",
+    "save_retry": "erneut versuchen",
+    "save_text": "Ihre angehefteten Apps, Lesezeichen und Ordner – so angeordnet auf jedem Gerät, auf dem Sie sich anmelden.",
+    "save_title": "Diese Anordnung auf QDN speichern?"
+  },
   "level": "Ebene",
   "library": "Bibliothek",
   "list": {
@@ -699,6 +733,7 @@
   "name": "Name",
   "name_app": "Name/App",
   "navbar": {
+    "search_library": "Q-Apps nach „{{query}}“ durchsuchen",
     "search_placeholder": "Q-Apps durchsuchen oder qortal:// eingeben",
     "session": {
       "lock_description": "Chats und Anrufe bleiben verbunden",
@@ -707,7 +742,12 @@
       "logout_title": "Abmelden",
       "menu_aria": "Sitzungsoptionen",
       "tooltip": "Sperren oder abmelden"
-    }
+    },
+    "suggestion_type": {
+      "app": "Q-App",
+      "website": "Website"
+    },
+    "suggestions": "Vorschläge"
   },
   "new_post_in": "neuer Beitrag in {{ title }}",
   "none": "keiner",
@@ -852,15 +892,15 @@
     "wallets": "Wallets"
   },
   "quitter_feed": {
-    "empty_message_no_following": "Stöbere in Quitter und folge Konten, um deinen Feed aufzubauen.",
+    "empty_message_no_following": "Stöbere in {{app}} und folge Konten, um deinen Feed aufzubauen.",
     "empty_message_no_name": "Melde dich mit einem Qortal-Namen an, um einen personalisierten Feed zu erstellen.",
-    "empty_message_no_posts": "Die Konten, denen du folgst, haben noch keine Beiträge auf Quitter.",
+    "empty_message_no_posts": "Die Konten, denen du folgst, haben noch keine Beiträge auf {{app}}.",
     "empty_title_general": "Keine Beiträge verfügbar",
     "empty_title_no_following": "Du folgst noch niemandem.",
     "empty_title_no_name": "Melde dich an, um deinen Feed zu personalisieren",
     "empty_title_no_posts": "Keine gefolgten Beiträge verfügbar",
-    "error_following": "Der personalisierte Quitter-Feed ist vorübergehend nicht verfügbar. Bitte versuche es erneut.",
-    "error_generic": "Der öffentliche Quitter-Feed ist vorübergehend nicht verfügbar. Bitte gleich noch einmal versuchen.",
+    "error_following": "Der personalisierte {{app}}-Feed ist vorübergehend nicht verfügbar. Bitte versuche es erneut.",
+    "error_generic": "Der öffentliche {{app}}-Feed ist vorübergehend nicht verfügbar. Bitte gleich noch einmal versuchen.",
     "error_timeout": "Feed-Laden fehlgeschlagen. Du kannst es erneut versuchen oder zu Allgemein zurückkehren.",
     "error_title_following": "Feed-Laden fehlgeschlagen",
     "error_title_general": "Beiträge konnten nicht geladen werden",
