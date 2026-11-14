@@ -540,8 +540,12 @@ export function AppBookmarksButton({
   );
   const foundFolders = currentFolder ? [] : searchFolders(data.folders, query);
   // Searching reaches every bookmark, so the whole account's count decides.
+  // Anything typed keeps the box: removing a bookmark can take the count
+  // under that, and the search would leave with its filter still on, so the
+  // bookmarks left would look as though they had gone too.
   const canSearch =
-    data.bookmarks.length + data.folders.length >= BOOKMARK_SEARCH_FROM;
+    data.bookmarks.length + data.folders.length >= BOOKMARK_SEARCH_FROM ||
+    query.length > 0;
   const hasRows = isSearching
     ? foundBookmarks.length + foundFolders.length > 0
     : visibleBookmarks.length + (currentFolder ? 0 : data.folders.length) > 0;

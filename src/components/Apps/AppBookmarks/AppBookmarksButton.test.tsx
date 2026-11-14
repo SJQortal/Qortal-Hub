@@ -44,6 +44,9 @@ import type { AppBookmark, AppBookmarkFolder } from './bookmarkTypes';
 const ADDRESS = 'Qaddress';
 const OPEN_MENU = 'core:bookmarks.title';
 const SEARCH = 'core:bookmarks.search';
+const MORE = 'core:bookmarks.more';
+const CLEAR_SEARCH = 'core:launcher.clear_search';
+const DELETE = 'core:bookmarks.delete';
 
 const folder = (id: string, name: string): AppBookmarkFolder => ({
   id,
@@ -190,6 +193,39 @@ describe('the bookmarks menu', () => {
     expect(screen.queryByText('Q-Mail')).toBeNull();
     // Found in a folder, so the row says which one.
     expect(screen.getByText('Media · Q-Tube')).toBeVisible();
+  });
+
+  it('keeps the search after deleting the bookmark it found', async () => {
+    // Seven, so there is a search box; deleting the one it found takes the
+    // count below seven, and the box must not leave with its filter still on.
+    const { user } = await show(
+      [],
+      [
+        bookmark('b1', 'Watch later', { appName: 'Q-Tube' }),
+        bookmark('b2', 'Q-Mail'),
+        bookmark('b3', 'Q-Blog'),
+        bookmark('b4', 'Q-Trade'),
+        bookmark('b5', 'Q-Fund'),
+        bookmark('b6', 'Q-Sandbox'),
+        bookmark('b7', 'Q-Shop'),
+      ]
+    );
+
+    await user.type(screen.getByPlaceholderText(SEARCH), 'watch');
+    await user.click(
+      within(rowOf('Watch later')).getByRole('button', { name: MORE })
+    );
+    await user.click(screen.getByText(DELETE));
+
+    await waitFor(() => expect(screen.queryByText('Watch later')).toBeNull());
+    // Still there, still holding what was typed, so it can be cleared.
+    expect(screen.getByPlaceholderText(SEARCH)).toHaveValue('watch');
+    expect(screen.getByText('core:launcher.no_matches|watch')).toBeVisible();
+
+    await user.click(screen.getByRole('button', { name: CLEAR_SEARCH }));
+
+    expect(screen.getByText('Q-Mail')).toBeVisible();
+    expect(screen.getByText('Q-Shop')).toBeVisible();
   });
 
   it('says when nothing matches what was typed', async () => {
