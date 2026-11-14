@@ -1,5 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { act, render, screen, waitFor, within } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ThemeProvider } from '@mui/material/styles';
 import { createStore, Provider } from 'jotai';
@@ -105,11 +112,14 @@ const show = async ({
   folders = [],
   pins = [],
   settings = {},
+  onTitleBarDoubleClick,
 }: {
   bookmarks?: AppBookmark[];
   folders?: AppBookmarkFolder[];
   pins?: PinnedApp[];
   settings?: Partial<AppsBarSettings>;
+  /** What the title bar does when it is double-clicked: maximize. */
+  onTitleBarDoubleClick?: () => void;
 } = {}) => {
   giveStore(folders, bookmarks);
   const store = createStore();
@@ -122,7 +132,10 @@ const show = async ({
   render(
     <Provider store={store}>
       <ThemeProvider theme={darkTheme}>
-        <AppsBar address={ADDRESS} />
+        {/* The title bar the bar sits in, which maximizes on a double-click. */}
+        <div data-testid="title-bar" onDoubleClick={onTitleBarDoubleClick}>
+          <AppsBar address={ADDRESS} />
+        </div>
       </ThemeProvider>
     </Provider>
   );
@@ -577,6 +590,30 @@ describe('renaming an item of the bar', () => {
     expect(
       screen.getByRole('menuitem', { name: 'core:bookmarks.rename' })
     ).toBeVisible();
+  });
+
+  it('keeps a double-click in the bar off the title bar', async () => {
+    // The title bar maximizes the window when it is double-clicked, and the
+    // bar sits in it: opening a bookmark twice must not resize the window.
+    const maximize = vi.fn();
+    const { user } = await show({
+      folders: [folder('f1', 'Media')],
+      bookmarks: [bookmark('b1', 'Q-Tube', { folderId: 'f1' })],
+      pins: [{ service: 'APP', name: 'Q-Mail' }],
+      onTitleBarDoubleClick: maximize,
+    });
+
+    fireEvent.dblClick(itemOf('Q-Mail'));
+    expect(maximize).not.toHaveBeenCalled();
+
+    // What a folder opens is in a portal, which events still climb out of.
+    await user.click(itemOf('Media'));
+    fireEvent.dblClick(screen.getByRole('menuitem', { name: /Q-Tube/ }));
+    expect(maximize).not.toHaveBeenCalled();
+
+    // The title bar itself still does.
+    fireEvent.dblClick(screen.getByTestId('title-bar'));
+    expect(maximize).toHaveBeenCalledTimes(1);
   });
 
   it('opens an item from its menu as well', async () => {

@@ -53,6 +53,16 @@ const LIST_ICON_PX = 22;
 /** The room kept at the end of the row for the button holding the rest. */
 const MORE_BUTTON_PX = 36;
 
+/**
+ * The title bar maximizes the window when it is double-clicked, and the bar
+ * sits inside it. What the bar holds keeps its double-clicks to itself, so
+ * opening a bookmark twice does not resize the window; the empty title-bar
+ * space around the bar still works. What the bar opens is in a portal, which
+ * React still lets events climb out of, so those keep them too.
+ */
+const keepDoubleClick = (event: MouseEvent<HTMLElement>) =>
+  event.stopPropagation();
+
 type AppsBarProps = {
   address: string;
 };
@@ -356,6 +366,7 @@ export function AppsBar({ address }: AppsBarProps) {
                   onContextMenu={(event: MouseEvent<HTMLElement>) =>
                     openItemMenu(item, event)
                   }
+                  onDoubleClick={keepDoubleClick}
                   tabIndex={isHidden ? -1 : 0}
                   sx={{
                     alignItems: 'center',
@@ -420,6 +431,7 @@ export function AppsBar({ address }: AppsBarProps) {
                 closeFolder();
                 setIsShowingRest(true);
               }}
+              onDoubleClick={keepDoubleClick}
               ref={moreRef}
               size="small"
               sx={{
@@ -443,6 +455,7 @@ export function AppsBar({ address }: AppsBarProps) {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         MenuListProps={{ 'aria-label': t('core:apps_bar.more'), dense: true }}
         onClose={() => setIsShowingRest(false)}
+        onDoubleClick={keepDoubleClick}
         open={isShowingRest && hiddenItems.length > 0}
         slotProps={{ paper: { sx: { maxHeight: 420, minWidth: 220 } } }}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
@@ -457,6 +470,7 @@ export function AppsBar({ address }: AppsBarProps) {
         anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
         MenuListProps={{ 'aria-label': openFolder?.ownName, dense: true }}
         onClose={closeFolder}
+        onDoubleClick={keepDoubleClick}
         open={!!openFolder && !!folderAnchor}
         slotProps={{ paper: { sx: { maxHeight: 420, minWidth: 220 } } }}
         transformOrigin={{ horizontal: 'left', vertical: 'top' }}
@@ -477,6 +491,7 @@ export function AppsBar({ address }: AppsBarProps) {
         anchorPosition={menuPosition ?? undefined}
         open={!!menuItem && !!menuPosition}
         onClose={closeMenu}
+        onDoubleClick={keepDoubleClick}
       >
         {!!menuItem && menuItem.type !== 'folder' && (
           <MenuItem
@@ -506,6 +521,7 @@ export function AppsBar({ address }: AppsBarProps) {
       <Dialog
         open={!!renamingItem}
         onClose={() => setRenamingItem(null)}
+        onDoubleClick={keepDoubleClick}
         fullWidth
         maxWidth="xs"
       >
