@@ -67,6 +67,7 @@ import {
   type AccountTxListState,
 } from '../transactions/useAccountTxList';
 import { useListView, ViewToggle, type ListView } from '../ViewToggle';
+import { FollowControl } from '../follow/FollowControl';
 import { NameHistoryList, type HistoryStatus } from './NameHistoryList';
 import {
   NameHead,
@@ -263,6 +264,7 @@ function OwnedName({
           <NameHead name={name} primary={primary} />
           <NameRecordLine name={name} owner={address} near={near} />
           <NameNotes name={name} owner={address} />
+          <FollowControl names={[name]} primary={name} place="name" />
         </>
       }
       history={

@@ -3,7 +3,8 @@
  * it stands in MINTER, Dev Admin, minting now, a minting penalty and
  * whether you blocked it, then its address and public key with Copy, a
  * note when it was opened by a name, and what User search offered: Send
- * QORT and Block. The chips' colours say what kind of fact each is, never
+ * QORT and Block, then Follow for its names (follow/FollowControl). The
+ * chips' colours say what kind of fact each is, never
  * good or bad. For a viewer who sees the detailed parts, an exchange's
  * deposit account is named as the exchange, with a chip saying so, and
  * Compare with… and Add to compare (compare/CompareButtons) follow Block.
@@ -29,6 +30,7 @@ import {
   type MintingNow,
 } from '../../lib/explorer/rules';
 import { CompareButtons } from './compare/CompareButtons';
+import { FollowControl } from './follow/FollowControl';
 import { useExplorer } from './ExplorerContext';
 import { ExplorerAvatar } from './ExplorerSearchField';
 import { useExchangeName } from './useExplorerAccess';
@@ -376,6 +378,11 @@ export function AccountHeader({
             </Button>
           </span>
         </Tooltip>
+        <FollowControl
+          names={names ? names.names : null}
+          primary={name}
+          place="header"
+        />
         <CompareButtons
           address={address}
           label={name ? visibleName(name) : (exchange ?? shortAddress(address))}

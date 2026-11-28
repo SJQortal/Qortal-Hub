@@ -19,8 +19,9 @@ step of the trail. A Q-App's `OPEN_USER_LOOKUP` request sends the same event.
   your account, and recent explorations.
 - **An account:** its picture and name, chips (level, Minter Admin or MINTER
   member, Dev Admin, minting now, a minting penalty, blocked), its address and
-  public key with Copy, Send QORT and Block (as User search had them), the trail
-  of accounts opened one from another, then its tabs: Overview, Transactions,
+  public key with Copy, Send QORT and Block (as User search had them), Follow
+  (see "Following"), the trail of accounts opened one from another, then its
+  tabs: Overview, Transactions,
   Assets and Names, and Connections and Trades for a viewer the level 5+ rule
   lets see them (see below).
 - **Its Overview:** one line of facts (level, MINTER, names, first seen, last
@@ -56,7 +57,8 @@ step of the trail. A Q-App's `OPEN_USER_LOOKUP` request sends the same event.
   first (or in another order: newest or oldest registered, A to Z, Z to A,
   latest activity), each with its record (when it was registered and last
   updated, whether it is for sale and at what price), notes on how it is
-  written, what this account did with it, and "Its whole history". Below, the
+  written, what this account did with it, Follow (see "Following") and "Its
+  whole history". Below, the
   names it had: sold, or renamed to something else, each with who has it now.
 - **A name's whole history** (from a name on the Names tab or in any
   sentence): its record and owner, then every change to it since it was
@@ -1047,10 +1049,49 @@ nothing says so and nothing of it is read. From Q-Mintership+'s Trades tab.
   stays, with the failure and Retry).
 - **Refresh** reads them all again; what was read before stays while it does.
 
+## Following
+
+Following a name makes the node Hub uses download that name's files and help
+share them, now and as they publish more: the name goes into Core's
+`followedNames` list, the one Q-Apps such as Q-Share follow with too. The list,
+its reads and writes are the Node Manager's follow layer
+(`src/components/NodeManager/useFollowedNames.ts`, see `docs/node-manager.md`),
+so the Explorer and the Node Manager's Data section always show the same.
+
+- **Where:** Follow in the account's header, after Block, covers its names.
+  With one name it asks "Follow …?" and says how much the name has published.
+  With several it asks which to follow: the ones followed are ticked (none
+  yet: its primary name), each with how much it has published, and Save
+  follows and unfollows the difference. Each name on the Names tab has its
+  own Follow, for that name.
+- **Following** opens a menu: "Their files on your node" opens the Node
+  Manager's Data section at the name (its primary name when that is
+  followed) and closes the Explorer, as Send QORT does; then Unfollow, or
+  "Choose the names to follow" for several. With some of several names
+  followed, the button says how many ("Following 1/2").
+- **How much:** what the name has published, from its resource search
+  (`usePublishedTotals`), read once its row is near the screen, and
+  "at least" when the search stops short. Core sets no limit per name, and
+  the question says so.
+- **Unfollow:** the node stops fetching their new files. Core also follows
+  through any other list whose name starts with `followedNames` (a Q-App's);
+  when one of those still has the name, the message says so.
+- **Your own node only:** on the public node the header's Follow is off and
+  says why, the names have none, and no list is read. Until the node's list
+  has been read the buttons are off; when the read fails, the header offers
+  to read it again.
+- **When it fails:** the question stays open with the node's reason, in the
+  Node Manager's words. When the window closed before the node answered,
+  Hub's message bar says how it went.
+- **No files here:** the Explorer neither lists nor removes files. The Node
+  Manager's Data section can remove one, but only for a name the node doesn't
+  follow: Core fetches a followed name's files again.
+
 ## Rules
 
-- **Read-only.** Public GETs to the node Hub uses, no API key. Send QORT,
-  Block and Join hand over to Hub's own payment window, block lists and join
+- **Read-only, but for Follow.** Public GETs to the node Hub uses, no API
+  key. Follow's reads and writes of the node's list are the Node Manager's
+  (see "Following"). Send QORT, Block and Join hand over to Hub's own payment window, block lists and join
   window. Send QORT hands over the address only (a name could change hands
   before the payment is sent), and Block waits until the account's name is
   known, so the address and the name are blocked together.
@@ -1084,6 +1125,7 @@ nothing says so and nothing of it is read. From Q-Mintership+'s Trades tab.
 | `src/components/Explorer/`              | the window, start page, account page, header, trail, tabs (`AccountTabs.tsx`) and Overview sections; a read kept through a failed read again (`useKeptRead.ts`)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | `src/components/Explorer/transactions/` | the Transactions tab, its rows and their sentences (an asset order's fills: `useOrderFills.ts`), one transaction's page                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `src/components/Explorer/names/`        | the Names tab, a name's parts and history, a name's own page (`NameLifeView.tsx`)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `src/components/Explorer/follow/`       | Follow: the header's and each name's button, the question and the menu (`FollowControl.tsx`); the list is the Node Manager's                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | `src/components/Explorer/chain/`        | Transactions on Qortal: the step, its pickers and pages, what waits, the start page's latest transactions and the link from a transaction's block; its reads and rules are `src/lib/explorer/chainTx.ts`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | `src/components/Explorer/connections/`  | the Connections tab, its rows, payments, In common and the exchange notice; the circle (`ConnectionsCircle.tsx`, `CircleNodeDialog.tsx`, `circleParts.ts`; its layout is `src/lib/explorer/circle.ts`) and the Account report (`AccountReport.tsx`, its text `accountReportText.ts`, its building blocks `src/lib/explorer/accountReport.ts`); `useExplorerAccess.ts` runs the rule in the window; the Overview's Direct links (`overview/DirectLinksPreview.tsx`)                                                                                                                                                                                                                                                                                                           |
 | `src/components/Explorer/compare/`      | Compare: its step, cards, sections and picks (`compareSteps.tsx`, `useCompareData.ts`); its rules, reads and picks in `src/lib/explorer/` (`compare.ts`, `compareReads.ts`, `comparePicks.ts`)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
