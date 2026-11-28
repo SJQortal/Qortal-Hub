@@ -70,7 +70,9 @@ whenever the wallet, its keys or the node are stored or removed, so a logout,
 another account signing in or another node ends it. Right before the request
 signs, `checkBudgetSigner` checks the session and that the key it signs with
 is that account's: in the vote and chat handlers after they read the key
-pair, and in `publishData` through its `beforeSigning`. When either changed,
+pair and again right before they sign (after the vote's last reference,
+after a chat message's proof of work), and in `publishData` through its
+`beforeSigning`. When either changed,
 nothing is signed, the request's fees go back to the budget, and the app gets
 `question:message.error.account_changed`. A multi-publish stops there: the
 resources after it aren't published either. A request already sent when the

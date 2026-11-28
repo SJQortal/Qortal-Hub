@@ -612,6 +612,24 @@ describe('a request the budget took is signed in its session by its own account,
   const switchAccount = () => signIn(OTHER_ACCOUNT, otherKeys);
   const signInAgain = () => signIn(ACCOUNT, ownKeys);
 
+  /** The node, which also gives a recipient's key; returns its address. */
+  const stubNodeWithRecipient = () => {
+    const node = stubNode();
+    const recipientKey = Base58.encode(new Uint8Array(32).fill(3)) as string;
+    const recipient = String(publicKeyToAddress(Base58.decode(recipientKey)));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) =>
+        String(url).includes('/addresses/publickey/')
+          ? new Response(recipientKey, {
+              headers: { 'content-type': 'text/plain' },
+            })
+          : node(url)
+      )
+    );
+    return recipient;
+  };
+
   /**
    * publishData as it works: it uploads (`whileUploading` runs then), reads
    * the key pair and signs.
@@ -726,19 +744,7 @@ describe('a request the budget took is signed in its session by its own account,
 
   it("doesn't send a direct message once another account signed in", async () => {
     giveBudget(QORT);
-    const node = stubNode();
-    const recipientKey = Base58.encode(new Uint8Array(32).fill(3)) as string;
-    const recipient = String(publicKeyToAddress(Base58.decode(recipientKey)));
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(async (url: string) =>
-        String(url).includes('/addresses/publickey/')
-          ? new Response(recipientKey, {
-              headers: { 'content-type': 'text/plain' },
-            })
-          : node(url)
-      )
-    );
+    const recipient = stubNodeWithRecipient();
     const { shown } = watchWindows();
     vi.mocked(getBalanceInfo).mockImplementationOnce(async () => {
       await switchAccount();
@@ -751,6 +757,87 @@ describe('a request the budget took is signed in its session by its own account,
     expect(signChatFunc).not.toHaveBeenCalled();
     expect(shown).toHaveLength(0);
     expect(budget()).toMatchObject({ actions: 0, recent: [] });
+  });
+
+  it('stops a vote when the account changes while it reads the last reference', async () => {
+    giveBudget(BigInt(FEE_ATOMIC));
+    stubNode();
+    const { shown } = watchWindows();
+    const signed = vi.fn(() => new Uint8Array(4));
+    vi.mocked(createTransaction).mockResolvedValueOnce({
+      get signedBytes() {
+        return signed();
+      },
+    });
+    vi.mocked(getLastRef).mockImplementationOnce(async () => {
+      await switchAccount();
+      return 'LAST_REF';
+    });
+    await expect(vote()).rejects.toThrow(CHANGED);
+    // It read its own keys before the change, and still isn't signed.
+    expect(signed).not.toHaveBeenCalled();
+    expect(processTransactionVersion2).not.toHaveBeenCalled();
+    expect(shown).toHaveLength(0);
+    expect(budget()).toMatchObject({ used: '0', actions: 0, recent: [] });
+
+    await signInAgain();
+    await expect(vote()).resolves.toEqual({ signature: 'VOTE_SIG' });
+    expect(budget()).toMatchObject({ used: '1000000', actions: 1 });
+  });
+
+  it("doesn't send a direct message when the account changes during its proof of work", async () => {
+    giveBudget(QORT);
+    const recipient = stubNodeWithRecipient();
+    const { shown } = watchWindows();
+    vi.mocked(performPowTask).mockImplementationOnce(async () => {
+      await switchAccount();
+      return { nonce: 1, chatBytesArray: new Uint8Array(4) };
+    });
+    await expect(
+      sendChatMessage({ recipient, message: 'hi' }, true, OPENED_APP)
+    ).rejects.toThrow(CHANGED);
+    expect(performPowTask).toHaveBeenCalledTimes(1);
+    expect(signChatFunc).not.toHaveBeenCalled();
+    expect(shown).toHaveLength(0);
+    expect(budget()).toMatchObject({ actions: 0, recent: [] });
+  });
+
+  it("doesn't send a group message when the account changes during its proof of work", async () => {
+    giveBudget(QORT);
+    stubNode();
+    const { shown } = watchWindows();
+    vi.mocked(performPowTask).mockImplementationOnce(async () => {
+      await switchAccount();
+      return { nonce: 1, chatBytesArray: new Uint8Array(4) };
+    });
+    await expect(
+      sendChatMessage({ groupId: 7, message: 'hi' }, true, OPENED_APP)
+    ).rejects.toThrow(CHANGED);
+    expect(performPowTask).toHaveBeenCalledTimes(1);
+    expect(signChatFunc).not.toHaveBeenCalled();
+    expect(shown).toHaveLength(0);
+    expect(budget()).toMatchObject({ actions: 0, recent: [] });
+
+    await signInAgain();
+    await expect(
+      sendChatMessage({ groupId: 7, message: 'hi' }, true, OPENED_APP)
+    ).resolves.toEqual({ signature: 'CHAT_SIG' });
+    expect(budget()).toMatchObject({ actions: 1 });
+  });
+
+  it('counts a group message already signed when the account changed', async () => {
+    giveBudget(QORT);
+    stubNode();
+    watchWindows();
+    // signChatFunc signs first, then sends; the change comes while it sends.
+    vi.mocked(signChatFunc).mockImplementationOnce(async () => {
+      await switchAccount();
+      return { signature: 'CHAT_SIG' };
+    });
+    await expect(
+      sendChatMessage({ groupId: 7, message: 'hi' }, true, OPENED_APP)
+    ).resolves.toEqual({ signature: 'CHAT_SIG' });
+    expect(budget()).toMatchObject({ actions: 1 });
   });
 
   it("doesn't sign a publish when another account signed in during the upload", async () => {

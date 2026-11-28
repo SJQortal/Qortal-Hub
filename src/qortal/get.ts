@@ -453,6 +453,8 @@ export const _voteOnPoll = async (
       rOptionIndex: optionIndex,
       lastReference: lastRef,
     });
+    // Again after the waits above: reading the bytes signs them.
+    checkBudgetSigner(budgetTicket, parsedData.publicKey);
     const signedBytes = Base58.encode(tx.signedBytes);
     const res = await processTransactionVersion2(signedBytes);
     if (!res?.signature)
@@ -3152,7 +3154,8 @@ export const sendChatMessage = async (data, isFromExtension, appInfo) => {
         chatBytes,
         difficulty
       );
-
+      // Again after the proof of work: signChatFunc signs at once.
+      checkBudgetSigner(budgetTicket, parsedData.publicKey);
       let _response = await signChatFunc(chatBytesArray, nonce, null, keyPair);
       if (_response?.error) {
         throw new Error(_response?.message);
@@ -3203,7 +3206,8 @@ export const sendChatMessage = async (data, isFromExtension, appInfo) => {
         chatBytes,
         difficulty
       );
-
+      // Again after the proof of work: signChatFunc signs at once.
+      checkBudgetSigner(budgetTicket, parsedData.publicKey);
       let _response = await signChatFunc(chatBytesArray, nonce, null, keyPair);
       if (_response?.error) {
         throw new Error(_response?.message);
