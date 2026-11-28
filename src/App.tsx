@@ -10,6 +10,7 @@ import { useDropzone } from 'react-dropzone';
 import { Box, ButtonBase, Typography, useTheme } from '@mui/material';
 import { AnimatePresence } from 'framer-motion';
 import { decryptStoredWallet } from './utils/decryptWallet';
+import { resetPublishedViewChannel } from './utils/qChatViewContextSuppression';
 import {
   getWalletErrorMessage,
   getWalletFieldLabel,
@@ -152,7 +153,6 @@ import {
   resolveAutoLockTimeoutMinutes,
   type AutoLockTimeoutMinutes,
 } from './lib/autoLock';
-
 const MINTING_LOCAL_DEBUG_STORAGE_KEY = 'hub.mintingLocalDebug';
 const LOCAL_CORE_READY_SYNC_PERCENT = 99.95;
 
@@ -865,7 +865,12 @@ function App() {
             message?.payload?.checkbox1?.value || false;
         }
         setConfirmRequestRead(false);
-        await showQortalRequestExtension(message?.payload);
+        const answer = await showQortalRequestExtension(message?.payload);
+        // "Top up and approve": get.ts checks the choices again.
+        const budgetTopUp =
+          answer && typeof answer === 'object' && 'budgetTopUp' in answer
+            ? { budgetTopUp: answer.budgetTopUp }
+            : {};
 
         if (qortalRequestCheckbox1Ref.current) {
           event.source.postMessage(
@@ -875,6 +880,7 @@ function App() {
               result: {
                 accepted: true,
                 checkbox1: qortalRequestCheckbox1Ref.current,
+                ...budgetTopUp,
               },
             },
             event.origin
@@ -887,6 +893,7 @@ function App() {
             requestId: message?.requestId,
             result: {
               accepted: true,
+              ...budgetTopUp,
             },
           },
           event.origin
@@ -1176,6 +1183,9 @@ function App() {
       await cleanupAudioSurfaceBeforeLogout();
       await sendOfflineBeforeLogout();
       await cleanupReticulumAccountBeforeLogout();
+      // Drop the published view channel so a later account on the same page
+      // session cannot inherit it and have its notifications suppressed.
+      resetPublishedViewChannel();
       const response = await window.sendMessage('logout', {});
       if (response) {
         clearLastAuthenticatedWalletAddress();
@@ -1623,6 +1633,21 @@ function App() {
     confirmRequestRead,
     onOkQortalRequestExtension,
   ]);
+  const onOkQortalRequestExtensionTopUp = useCallback(
+    (budgetTopUp: unknown) => {
+      const ext = messageQortalRequestExtension as
+        | { confirmCheckbox?: boolean }
+        | null
+        | undefined;
+      if (ext?.confirmCheckbox && !confirmRequestRead) return;
+      onOkQortalRequestExtension({ budgetTopUp });
+    },
+    [
+      messageQortalRequestExtension,
+      confirmRequestRead,
+      onOkQortalRequestExtension,
+    ]
+  );
   const onOpenCoreSetup = useCallback(
     () => setOpenCoreSetup(true),
     [setOpenCoreSetup]
@@ -2007,6 +2032,7 @@ function App() {
               qortalRequestCheckbox1Ref.current = checked;
             }}
             onAccept={onOkQortalRequestExtensionAccept}
+            onAcceptWithTopUp={onOkQortalRequestExtensionTopUp}
             onCancel={onCancelQortalRequestExtension}
             onCountdownComplete={onCancelQortalRequestExtension}
           />
