@@ -181,11 +181,11 @@
     "allowed": {
       "allow_again_label": "السماح مجددًا: {{what}}",
       "every_app": "كل التطبيقات",
+      "kind_authenticate": "تسجيل الدخول",
       "kind_balance": "رؤية رصيد {{coin}} الخاص بك",
       "kind_chat": "إرسال رسائل الدردشة",
       "kind_lists": "قراءة قوائمك، في كل التطبيقات",
       "kind_notifications": "عرض الإشعارات لك",
-      "kind_sign_in": "تسجيل الدخول",
       "kind_transactions": "رؤية معاملات {{coin}} الخاصة بك",
       "kind_wallet": "رؤية عنوان محفظة {{coin}} الخاصة بك",
       "kind_wallet_info": "رؤية معلومات محفظة {{coin}} الخاصة بك",

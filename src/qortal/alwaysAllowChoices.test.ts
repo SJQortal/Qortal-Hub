@@ -11,7 +11,7 @@ import {
 describe('the "always allow" boxes, read back from their keys', () => {
   it('reads each box with its app, and the coin of a wallet look-up', () => {
     expect(alwaysAllowChoiceOf('qAPPAutoAuth-Opened-App')).toEqual({
-      kind: 'sign_in',
+      kind: 'authenticate',
       key: 'qAPPAutoAuth-Opened-App',
       app: 'Opened-App',
       coin: null,
@@ -72,8 +72,8 @@ describe('the "always allow" boxes, read back from their keys', () => {
     ]);
     expect(choices.map((c) => [c.app, c.kind, c.on])).toEqual([
       [null, 'lists', true],
-      ['Another-App', 'sign_in', true],
-      ['Opened-App', 'sign_in', true],
+      ['Another-App', 'authenticate', true],
+      ['Opened-App', 'authenticate', true],
       ['Opened-App', 'chat', false],
       ['Opened-App', 'balance', true],
     ]);
@@ -87,7 +87,7 @@ describe('the "always allow" boxes, read back from their keys', () => {
       { key: 'qAPPAutoLists', value: null },
     ]);
     expect(choices.map((c) => [c.app, c.kind, c.on])).toEqual([
-      ['Opened-App', 'sign_in', false],
+      ['Opened-App', 'authenticate', false],
       ['Opened-App', 'balance', true],
     ]);
   });

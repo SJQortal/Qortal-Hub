@@ -173,11 +173,11 @@
     "allowed": {
       "allow_again_label": "permitir de nuevo: {{what}}",
       "every_app": "todas las apps",
+      "kind_authenticate": "autenticarse",
       "kind_balance": "ver tu saldo de {{coin}}",
       "kind_chat": "enviar mensajes de chat",
       "kind_lists": "leer tus listas, en todas las apps",
       "kind_notifications": "mostrarte notificaciones",
-      "kind_sign_in": "iniciar sesión",
       "kind_transactions": "ver tus transacciones de {{coin}}",
       "kind_wallet": "ver tu dirección de billetera {{coin}}",
       "kind_wallet_info": "ver la información de tu billetera {{coin}}",
@@ -188,7 +188,7 @@
       "session": {
         "add_foreign_server": "añadir a tu nodo un servidor para otra moneda",
         "get_list_items": "leer tus listas, como los nombres que bloqueaste",
-        "get_user_account": "ver tu dirección y tu clave pública, como al iniciar sesión",
+        "get_user_account": "ver tu dirección y tu clave pública, como al autenticarse",
         "get_user_wallet": "ver las direcciones de tu billetera",
         "get_user_wallet_info": "ver las direcciones de tu billetera de otra moneda",
         "get_user_wallet_transactions": "ver las transacciones de tu billetera",
@@ -215,7 +215,7 @@
       "turn_on_label": "activar: {{what}}",
       "until_tab_closes_about": "qué significa esto",
       "until_tab_closes_count": "hasta que se cierre esta pestaña ({{n}})",
-      "until_tab_closes_info": "lo que esta app puede hacer en esta pestaña sin preguntarte, hasta que la cierres. Vino con algo que aprobaste, como su inicio de sesión. Elige uno para retirarlo: la app te preguntará primero, o no podrá hacerlo. Puedes permitirlo de nuevo aquí hasta que se cierre la pestaña."
+      "until_tab_closes_info": "lo que esta app puede hacer en esta pestaña sin preguntarte, hasta que la cierres. Vino con algo que aprobaste, como su autenticación. Elige uno para retirarlo: la app te preguntará primero, o no podrá hacerlo. Puedes permitirlo de nuevo aquí hasta que se cierre la pestaña."
     },
     "always_asks": "un presupuesto nunca cubre pagos, tarifas de apps, nombres, intercambios, cambios de grupo, tu avatar, una app o sitio web con tu nombre, valoraciones en la biblioteca de Hub ni nada que reemplace algo ya publicado.",
     "amount": "cantidad",

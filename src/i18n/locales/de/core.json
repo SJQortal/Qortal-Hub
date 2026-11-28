@@ -173,11 +173,11 @@
     "allowed": {
       "allow_again_label": "wieder erlauben: {{what}}",
       "every_app": "jede App",
+      "kind_authenticate": "authentifizieren",
       "kind_balance": "Ihr {{coin}}-Guthaben sehen",
       "kind_chat": "Chatnachrichten senden",
       "kind_lists": "Ihre Listen lesen, in jeder App",
       "kind_notifications": "Ihnen Benachrichtigungen anzeigen",
-      "kind_sign_in": "anmelden",
       "kind_transactions": "Ihre {{coin}}-Transaktionen sehen",
       "kind_wallet": "Ihre {{coin}}-Wallet-Adresse sehen",
       "kind_wallet_info": "Ihre {{coin}}-Wallet-Infos sehen",
@@ -188,7 +188,7 @@
       "session": {
         "add_foreign_server": "Ihrem Knoten einen Server für einen anderen Coin hinzufügen",
         "get_list_items": "Ihre Listen lesen, etwa die von Ihnen blockierten Namen",
-        "get_user_account": "Ihre Adresse und Ihren öffentlichen Schlüssel sehen, wie bei der Anmeldung",
+        "get_user_account": "Ihre Adresse und Ihren öffentlichen Schlüssel sehen, wie bei der Authentifizierung",
         "get_user_wallet": "Ihre Wallet-Adressen sehen",
         "get_user_wallet_info": "die Adressen Ihrer Wallet für einen anderen Coin sehen",
         "get_user_wallet_transactions": "Ihre Wallet-Transaktionen sehen",
@@ -215,7 +215,7 @@
       "turn_on_label": "einschalten: {{what}}",
       "until_tab_closes_about": "was das bedeutet",
       "until_tab_closes_count": "bis dieser Tab geschlossen wird ({{n}})",
-      "until_tab_closes_info": "was diese App in diesem Tab ohne Nachfrage tun darf, bis Sie den Tab schließen. Das kam mit etwas, das Sie genehmigt haben, etwa ihrer Anmeldung. Wählen Sie einen Eintrag, um ihn zurückzunehmen: Die App fragt Sie dann zuerst oder kann es nicht tun. Sie können ihn hier wieder erlauben, bis der Tab geschlossen wird."
+      "until_tab_closes_info": "was diese App in diesem Tab ohne Nachfrage tun darf, bis Sie den Tab schließen. Das kam mit etwas, das Sie genehmigt haben, etwa ihrer Authentifizierung. Wählen Sie einen Eintrag, um ihn zurückzunehmen: Die App fragt Sie dann zuerst oder kann es nicht tun. Sie können ihn hier wieder erlauben, bis der Tab geschlossen wird."
     },
     "always_asks": "ein Budget deckt nie Zahlungen, App-Gebühren, Namen, Handel, Gruppenänderungen, Ihren Avatar, eine App oder Website unter Ihrem Namen, Bewertungen in Hubs Bibliothek oder alles, was bereits Veröffentlichtes ersetzt.",
     "amount": "Betrag",

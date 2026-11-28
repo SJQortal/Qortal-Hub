@@ -157,7 +157,7 @@ describe('what the app on screen may do without asking', () => {
     showTab(APP_TAB);
 
     const allowed = within(openPanel()).getByTestId('allowed-for-app');
-    expect(await within(allowed).findByText('Sign in')).toBeTruthy();
+    expect(await within(allowed).findByText('Authenticate')).toBeTruthy();
     // The coin, as the app named it, sits in an isolate of its own.
     expect(
       within(allowed).getByText('See your \u2068BTC\u2069 balance')
@@ -190,7 +190,7 @@ describe('what the app on screen may do without asking', () => {
     ).toBeNull();
 
     await act(async () => waiting.forEach((release) => release()));
-    expect(await within(allowed).findByText('Sign in')).toBeTruthy();
+    expect(await within(allowed).findByText('Authenticate')).toBeTruthy();
   });
 
   it('turns a box off for this account only, keeps it listed, and turns it on again', async () => {
@@ -201,12 +201,14 @@ describe('what the app on screen may do without asking', () => {
     const allowed = within(openPanel()).getByTestId('allowed-for-app');
 
     fireEvent.click(
-      await within(allowed).findByRole('button', { name: 'Turn off: Sign in' })
+      await within(allowed).findByRole('button', {
+        name: 'Turn off: Authenticate',
+      })
     );
     const turnOn = await within(allowed).findByRole('button', {
-      name: 'Turn on: Sign in',
+      name: 'Turn on: Authenticate',
     });
-    expect(within(allowed).getByText('Sign in')).toBeTruthy();
+    expect(within(allowed).getByText('Authenticate')).toBeTruthy();
     expect(within(allowed).getByText('Off')).toBeTruthy();
     expect(stored()[`account:${ACCOUNT}:qAPPAutoAuth-Opened-App`]).toBe(false);
     expect(stored()[`account:${OTHER_ACCOUNT}:qAPPAutoAuth-Opened-App`]).toBe(
@@ -215,10 +217,60 @@ describe('what the app on screen may do without asking', () => {
 
     fireEvent.click(turnOn);
     expect(
-      await within(allowed).findByRole('button', { name: 'Turn off: Sign in' })
+      await within(allowed).findByRole('button', {
+        name: 'Turn off: Authenticate',
+      })
     ).toBeTruthy();
     expect(within(allowed).queryByText('Off')).toBeNull();
     expect(stored()[`account:${ACCOUNT}:qAPPAutoAuth-Opened-App`]).toBe(true);
+  });
+
+  it('keeps both boxes off when the second is turned off while the first is still saving', async () => {
+    await tick('qAPPAutoAuth-Opened-App');
+    await tick('qAPPSendChatMessage-Opened-App');
+    renderBar();
+    showTab(APP_TAB);
+    const allowed = within(openPanel()).getByTestId('allowed-for-app');
+    const turnOffAuth = await within(allowed).findByRole('button', {
+      name: 'Turn off: Authenticate',
+    });
+    const turnOffChat = within(allowed).getByRole('button', {
+      name: 'Turn off: Send chat messages',
+    });
+    // The store writes in the order it was asked to, the first one slowly.
+    const write = w.appStorage.set;
+    let releaseFirst: () => void = () => undefined;
+    const first = new Promise<void>((resolve) => {
+      releaseFirst = resolve;
+    });
+    let writes = 0;
+    let order = Promise.resolve();
+    w.appStorage.set = (key, value) => {
+      writes += 1;
+      const wait = writes === 1 ? first : Promise.resolve();
+      order = order.then(() => wait).then(() => write(key, value));
+      return order;
+    };
+
+    await act(async () => {
+      fireEvent.click(turnOffAuth);
+    });
+    await waitFor(() => expect(writes).toBe(1));
+    await act(async () => {
+      fireEvent.click(turnOffChat);
+    });
+    await act(async () => releaseFirst());
+
+    await within(allowed).findByRole('button', {
+      name: 'Turn on: Authenticate',
+    });
+    await within(allowed).findByRole('button', {
+      name: 'Turn on: Send chat messages',
+    });
+    expect(stored()[`account:${ACCOUNT}:qAPPAutoAuth-Opened-App`]).toBe(false);
+    expect(stored()[`account:${ACCOUNT}:qAPPSendChatMessage-Opened-App`]).toBe(
+      false
+    );
   });
 
   it('lists a box turned off earlier, to turn on again', async () => {
@@ -226,13 +278,16 @@ describe('what the app on screen may do without asking', () => {
     await act(async () => {
       await setPermission('qAPPAutoAuth-Opened-App', false);
     });
-    // A sign-in approved in the window since: the box no longer stands for it.
+    // An authentication approved in the window since: the box no longer
+    // stands for it.
     setSessionPermissions('t1', 'Opened-App', ['GET_USER_ACCOUNT']);
     renderBar();
     showTab(APP_TAB);
     const allowed = within(openPanel()).getByTestId('allowed-for-app');
     expect(
-      await within(allowed).findByRole('button', { name: 'Turn on: Sign in' })
+      await within(allowed).findByRole('button', {
+        name: 'Turn on: Authenticate',
+      })
     ).toBeTruthy();
     // Not offered for another account's box.
     expect(within(allowed).getAllByTestId('always-allow-choice')).toHaveLength(
@@ -252,7 +307,7 @@ describe('what the app on screen may do without asking', () => {
     showTab(APP_TAB);
     const allowed = within(openPanel()).getByTestId('allowed-for-app');
     const turnOff = await within(allowed).findByRole('button', {
-      name: 'Turn off: Sign in',
+      name: 'Turn off: Authenticate',
     });
 
     w.__qortalCurrentAddress = OTHER_ACCOUNT;
@@ -263,7 +318,7 @@ describe('what the app on screen may do without asking', () => {
     expect(
       stored()[`account:${OTHER_ACCOUNT}:qAPPAutoAuth-Opened-App`]
     ).toBeUndefined();
-    expect(within(allowed).getByText('Sign in')).toBeTruthy();
+    expect(within(allowed).getByText('Authenticate')).toBeTruthy();
   });
 
   it("folds the tab's list under its count, and opens and closes it on a click", async () => {
@@ -443,7 +498,7 @@ describe('what the app on screen may do without asking', () => {
     );
   });
 
-  it('turns the Sign in box off with the sign-in it gave this tab, and leaves the rest', async () => {
+  it('turns the Authenticate box off with the authentication it gave this tab, and leaves the rest', async () => {
     await tick('qAPPAutoAuth-Opened-App');
     setSessionPermissions('t1', 'Opened-App', [
       'GET_USER_ACCOUNT',
@@ -453,7 +508,7 @@ describe('what the app on screen may do without asking', () => {
     showTab(APP_TAB);
     const allowed = within(openPanel()).getByTestId('allowed-for-app');
     await openTabList(allowed);
-    // The box stands for the tab's sign-in too.
+    // The box stands for the tab's authentication too.
     expect(
       (await within(allowed).findAllByTestId('session-permission')).map(
         (button) => button.textContent
@@ -461,7 +516,7 @@ describe('what the app on screen may do without asking', () => {
     ).toEqual(['GET_WALLET_BALANCE']);
 
     fireEvent.click(
-      within(allowed).getByRole('button', { name: 'Turn off: Sign in' })
+      within(allowed).getByRole('button', { name: 'Turn off: Authenticate' })
     );
     await waitFor(() =>
       expect(hasSessionPermission('t1', 'Opened-App', 'GET_USER_ACCOUNT')).toBe(
@@ -472,9 +527,12 @@ describe('what the app on screen may do without asking', () => {
       true
     );
     expect(
-      await within(allowed).findByRole('button', { name: 'Turn on: Sign in' })
+      await within(allowed).findByRole('button', {
+        name: 'Turn on: Authenticate',
+      })
     ).toBeTruthy();
-    // The sign-in went with its box: it isn't listed apart to allow again.
+    // The authentication went with its box: it isn't listed apart to allow
+    // again.
     expect(
       within(allowed)
         .getAllByTestId('session-permission')
@@ -559,7 +617,7 @@ describe('what "until this tab closes" means', () => {
       await within(allowed).findByRole('button', { name: 'What this means' })
     );
     expect((await screen.findByRole('tooltip')).textContent).toBe(
-      "What this app may do in this tab without asking you, until you close the tab. It came with something you approved, such as its sign-in. Select one to take it back: the app then asks you first, or can't do it. You can allow it again here until the tab closes."
+      "What this app may do in this tab without asking you, until you close the tab. It came with something you approved, such as letting it authenticate. Select one to take it back: the app then asks you first, or can't do it. You can allow it again here until the tab closes."
     );
 
     await openTabList(allowed);
@@ -620,7 +678,7 @@ describe('boxes for every app and for other apps', () => {
     ).toBeTruthy();
     const others = await within(panel).findByTestId('allowed-for-other-apps');
     expect(within(others).getByText('Another-App')).toBeTruthy();
-    expect(within(others).getByText('Sign in')).toBeTruthy();
+    expect(within(others).getByText('Authenticate')).toBeTruthy();
     expect(
       within(others).queryByText('Read your lists, in every app')
     ).toBeNull();
@@ -668,7 +726,7 @@ describe('boxes for every app and for other apps', () => {
       2
     );
     expect(
-      within(opened).getByRole('button', { name: 'Turn off: Sign in' })
+      within(opened).getByRole('button', { name: 'Turn off: Authenticate' })
     ).toBeTruthy();
   });
 
@@ -679,16 +737,18 @@ describe('boxes for every app and for other apps', () => {
       'allowed-for-other-apps'
     );
     fireEvent.click(
-      within(others).getByRole('button', { name: 'Turn off: Sign in' })
+      within(others).getByRole('button', { name: 'Turn off: Authenticate' })
     );
     const turnOn = await within(others).findByRole('button', {
-      name: 'Turn on: Sign in',
+      name: 'Turn on: Authenticate',
     });
     expect(stored()[`account:${ACCOUNT}:qAPPAutoAuth-Another-App`]).toBe(false);
 
     fireEvent.click(turnOn);
     expect(
-      await within(others).findByRole('button', { name: 'Turn off: Sign in' })
+      await within(others).findByRole('button', {
+        name: 'Turn off: Authenticate',
+      })
     ).toBeTruthy();
     expect(stored()[`account:${ACCOUNT}:qAPPAutoAuth-Another-App`]).toBe(true);
   });

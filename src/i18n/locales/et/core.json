@@ -173,11 +173,11 @@
     "allowed": {
       "allow_again_label": "luba uuesti: {{what}}",
       "every_app": "kõik rakendused",
+      "kind_authenticate": "autentimine",
       "kind_balance": "sinu {{coin}} saldo nägemine",
       "kind_chat": "vestlussõnumite saatmine",
       "kind_lists": "sinu loendite lugemine, kõigis rakendustes",
       "kind_notifications": "teavituste näitamine",
-      "kind_sign_in": "sisselogimine",
       "kind_transactions": "sinu {{coin}} tehingute nägemine",
       "kind_wallet": "sinu {{coin}} rahakoti aadressi nägemine",
       "kind_wallet_info": "sinu {{coin}} rahakoti teabe nägemine",
@@ -188,7 +188,7 @@
       "session": {
         "add_foreign_server": "sinu sõlmele teise mündi serveri lisamine",
         "get_list_items": "sinu loendite lugemine, näiteks sinu blokeeritud nimede",
-        "get_user_account": "sinu aadressi ja avaliku võtme nägemine, nagu sisselogimisel",
+        "get_user_account": "sinu aadressi ja avaliku võtme nägemine, nagu autentimisel",
         "get_user_wallet": "sinu rahakoti aadresside nägemine",
         "get_user_wallet_info": "sinu teise mündi rahakoti aadresside nägemine",
         "get_user_wallet_transactions": "sinu rahakoti tehingute nägemine",
@@ -215,7 +215,7 @@
       "turn_on_label": "lülita sisse: {{what}}",
       "until_tab_closes_about": "mida see tähendab",
       "until_tab_closes_count": "kuni see vahekaart suletakse ({{n}})",
-      "until_tab_closes_info": "mida see rakendus tohib selles vahekaardis sinult küsimata teha, kuni sa vahekaardi sulged. See tuli koos millegagi, mille kinnitasid, näiteks sisselogimisega. Vali üks, et see tagasi võtta: siis küsib rakendus sinult enne või ei saa seda teha. Sa saad selle siin uuesti lubada, kuni vahekaart suletakse."
+      "until_tab_closes_info": "mida see rakendus tohib selles vahekaardis sinult küsimata teha, kuni sa vahekaardi sulged. See tuli koos millegagi, mille kinnitasid, näiteks autentimisega. Vali üks, et see tagasi võtta: siis küsib rakendus sinult enne või ei saa seda teha. Sa saad selle siin uuesti lubada, kuni vahekaart suletakse."
     },
     "always_asks": "eelarve ei kata kunagi makseid, rakenduste tasusid, nimesid, tehinguid, grupimuudatusi, sinu avatari, sinu nime all olevat rakendust või veebisaiti, hinnanguid Hubi teegis ega midagi, mis asendab juba avaldatut.",
     "amount": "summa",

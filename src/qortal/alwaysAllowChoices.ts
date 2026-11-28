@@ -5,7 +5,7 @@
  */
 
 export type AlwaysAllowKind =
-  | 'sign_in'
+  | 'authenticate'
   | 'chat'
   | 'wallet'
   | 'balance'
@@ -25,7 +25,7 @@ export type AlwaysAllowChoice = {
 
 /** In the order the panel lists them. */
 export const ALWAYS_ALLOW_KINDS: AlwaysAllowKind[] = [
-  'sign_in',
+  'authenticate',
   'chat',
   'wallet',
   'balance',
@@ -38,12 +38,12 @@ export const ALWAYS_ALLOW_KINDS: AlwaysAllowKind[] = [
 const LISTS_KEY = 'qAPPAutoLists';
 
 /**
- * What a box also stands for in a tab: its use (a sign-in above all) gives
- * the tab this session permission, which would let the next request through
- * after the box is turned off.
+ * What a box also stands for in a tab: its use (authenticating above all)
+ * gives the tab this session permission, which would let the next request
+ * through after the box is turned off.
  */
 export const SESSION_TWIN: Record<AlwaysAllowKind, string | null> = {
-  sign_in: 'GET_USER_ACCOUNT',
+  authenticate: 'GET_USER_ACCOUNT',
   chat: null,
   wallet: 'GET_USER_WALLET',
   balance: 'GET_WALLET_BALANCE',
@@ -71,7 +71,7 @@ export const SESSION_PERMISSIONS_NOT_READ = new Set([
 
 /**
  * Session permissions without which the request is refused instead of asked:
- * START_CROSSCHAIN_SERVER stands for the sign-in's session. Taken back, the
+ * START_CROSSCHAIN_SERVER stands for the authenticated session. Taken back, the
  * app can't do it in that tab until it is allowed again or the tab closes.
  */
 export const SESSION_PERMISSIONS_REFUSED_WITHOUT = new Set([
@@ -84,7 +84,7 @@ const COIN = /^[A-Za-z0-9]{2,10}$/;
 
 const PREFIXES: { kind: AlwaysAllowKind; prefix: string; perCoin: boolean }[] =
   [
-    { kind: 'sign_in', prefix: 'qAPPAutoAuth-', perCoin: false },
+    { kind: 'authenticate', prefix: 'qAPPAutoAuth-', perCoin: false },
     { kind: 'chat', prefix: 'qAPPSendChatMessage-', perCoin: false },
     { kind: 'wallet', prefix: 'qAPPAutoGetUserWallet-', perCoin: true },
     { kind: 'balance', prefix: 'qAPPAutoWalletBalance-', perCoin: true },

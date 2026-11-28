@@ -173,11 +173,11 @@
     "allowed": {
       "allow_again_label": "salli uudelleen: {{what}}",
       "every_app": "kaikki sovellukset",
+      "kind_authenticate": "todentaminen",
       "kind_balance": "{{coin}}-saldosi näkeminen",
       "kind_chat": "chat-viestien lähettäminen",
       "kind_lists": "listojesi lukeminen, kaikissa sovelluksissa",
       "kind_notifications": "ilmoitusten näyttäminen",
-      "kind_sign_in": "kirjautuminen",
       "kind_transactions": "{{coin}}-tapahtumiesi näkeminen",
       "kind_wallet": "{{coin}}-lompakkosi osoitteen näkeminen",
       "kind_wallet_info": "{{coin}}-lompakkosi tietojen näkeminen",
@@ -188,7 +188,7 @@
       "session": {
         "add_foreign_server": "toisen kolikon palvelimen lisääminen solmuusi",
         "get_list_items": "listojesi lukeminen, kuten estämiesi nimien",
-        "get_user_account": "osoitteesi ja julkisen avaimesi näkeminen, kuten kirjautuessa",
+        "get_user_account": "osoitteesi ja julkisen avaimesi näkeminen, kuten todentaessa",
         "get_user_wallet": "lompakkosi osoitteiden näkeminen",
         "get_user_wallet_info": "toisen kolikon lompakkosi osoitteiden näkeminen",
         "get_user_wallet_transactions": "lompakkosi tapahtumien näkeminen",
@@ -215,7 +215,7 @@
       "turn_on_label": "ota käyttöön: {{what}}",
       "until_tab_closes_about": "mitä tämä tarkoittaa",
       "until_tab_closes_count": "kunnes tämä välilehti suljetaan ({{n}})",
-      "until_tab_closes_info": "mitä tämä sovellus saa tehdä tällä välilehdellä kysymättä sinulta, kunnes suljet välilehden. Se tuli jonkin hyväksymäsi asian mukana, kuten sen kirjautumisen. Valitse kohta, jos haluat perua sen: sovellus kysyy sitten sinulta ensin tai ei voi tehdä sitä. Voit sallia sen täällä uudelleen, kunnes välilehti suljetaan."
+      "until_tab_closes_info": "mitä tämä sovellus saa tehdä tällä välilehdellä kysymättä sinulta, kunnes suljet välilehden. Se tuli jonkin hyväksymäsi asian mukana, kuten sen todentamisen. Valitse kohta, jos haluat perua sen: sovellus kysyy sitten sinulta ensin tai ei voi tehdä sitä. Voit sallia sen täällä uudelleen, kunnes välilehti suljetaan."
     },
     "always_asks": "budjetti ei koskaan kata maksuja, sovellusmaksuja, nimiä, kauppoja, ryhmämuutoksia, avatariasi, nimelläsi julkaistua sovellusta tai verkkosivustoa, arvioita Hubin kirjastossa eikä mitään, mikä korvaa jo julkaistun.",
     "amount": "summa",

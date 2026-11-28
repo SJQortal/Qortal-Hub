@@ -329,6 +329,75 @@ describe('"always allow" boxes belong to the account that ticked them', () => {
   });
 });
 
+describe('saving choices one at a time', () => {
+  /**
+   * The Hub's store, writing in the order it was asked to and holding the
+   * first write until `releaseFirst`, as a slow disk would.
+   */
+  const slowFirstWrite = () => {
+    const write = w.appStorage.set;
+    let releaseFirst: () => void = () => undefined;
+    const first = new Promise<void>((resolve) => {
+      releaseFirst = resolve;
+    });
+    let writes = 0;
+    let order = Promise.resolve();
+    w.appStorage.set = (key, value) => {
+      writes += 1;
+      const wait = writes === 1 ? first : Promise.resolve();
+      order = order.then(() => wait).then(() => write(key, value));
+      return order;
+    };
+    return { releaseFirst, writes: () => writes };
+  };
+
+  it('keeps both choices when the second is saved while the first still is', async () => {
+    await setPermission('qAPPAutoAuth-Opened-App', true);
+    await setPermission('qAPPSendChatMessage-Opened-App', true);
+    const store = slowFirstWrite();
+
+    const first = setPermission('qAPPAutoAuth-Opened-App', false);
+    await vi.waitFor(() => expect(store.writes()).toBe(1));
+    const second = setPermission('qAPPSendChatMessage-Opened-App', false);
+    await settle();
+    store.releaseFirst();
+    await Promise.all([first, second]);
+
+    expect(storedChoices()).toMatchObject({
+      [`account:${ACCOUNT_A}:qAPPAutoAuth-Opened-App`]: false,
+      [`account:${ACCOUNT_A}:qAPPSendChatMessage-Opened-App`]: false,
+    });
+  });
+
+  it('keeps a choice with the account it was made under, though another signed in before it was saved', async () => {
+    const store = slowFirstWrite();
+    const first = setPermission('qAPPAutoAuth-Opened-App', false);
+    await vi.waitFor(() => expect(store.writes()).toBe(1));
+    const second = setPermission('qAPPSendChatMessage-Opened-App', false);
+    signIn(ACCOUNT_B);
+    store.releaseFirst();
+    await Promise.all([first, second]);
+
+    expect(storedChoices()).toEqual({
+      [`account:${ACCOUNT_A}:qAPPAutoAuth-Opened-App`]: false,
+      [`account:${ACCOUNT_A}:qAPPSendChatMessage-Opened-App`]: false,
+    });
+  });
+
+  it("saves the next choice after one that couldn't be saved", async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const write = w.appStorage.set;
+    w.appStorage.set = vi
+      .fn(write)
+      .mockRejectedValueOnce(new Error('disk full'));
+    await setPermission('qAPPAutoAuth-Opened-App', true);
+    await setPermission('qAPPSendChatMessage-Opened-App', true);
+    expect(storedChoices()).toEqual({
+      [`account:${ACCOUNT_A}:qAPPSendChatMessage-Opened-App`]: true,
+    });
+  });
+});
+
 describe('notification permissions', () => {
   it('stay with the account they were given for, as before', async () => {
     await setPermission(getNotificationPermissionKey('Opened-App'), true);

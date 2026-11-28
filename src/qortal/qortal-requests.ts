@@ -264,10 +264,25 @@ function withoutSharedChoices(
   return next;
 }
 
-export async function setPermission(key, value) {
+// One choice is saved at a time: each save reads the record the one before
+// it wrote, so two saved at once (two boxes turned off quickly) can't undo
+// each other.
+let permissionSaves: Promise<void> = Promise.resolve();
+
+export function setPermission(key, value): Promise<void> {
+  // The key names the account signed in when the choice is made, not when
+  // its turn to be saved comes.
+  const normalizedKey = storedPermissionKey(key);
+  if (!normalizedKey) return Promise.resolve();
+  const saved = permissionSaves.then(() =>
+    savePermission(normalizedKey, value)
+  );
+  permissionSaves = saved;
+  return saved;
+}
+
+async function savePermission(normalizedKey: string, value: unknown) {
   try {
-    const normalizedKey = storedPermissionKey(key);
-    if (!normalizedKey) return;
     const appStorage = getAppStorage();
     if (appStorage) {
       const rawPermissions = toPermissionRecord(

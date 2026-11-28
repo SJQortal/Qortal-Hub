@@ -173,11 +173,11 @@
     "allowed": {
       "allow_again_label": "再次允许：{{what}}",
       "every_app": "所有应用",
+      "kind_authenticate": "认证",
       "kind_balance": "查看你的 {{coin}} 余额",
       "kind_chat": "发送聊天消息",
       "kind_lists": "读取你的列表（所有应用）",
       "kind_notifications": "向你显示通知",
-      "kind_sign_in": "登录",
       "kind_transactions": "查看你的 {{coin}} 交易",
       "kind_wallet": "查看你的 {{coin}} 钱包地址",
       "kind_wallet_info": "查看你的 {{coin}} 钱包信息",
@@ -188,7 +188,7 @@
       "session": {
         "add_foreign_server": "为你的节点添加其他币种的服务器",
         "get_list_items": "读取你的列表，例如你屏蔽的名称",
-        "get_user_account": "查看你的地址和公钥，与登录时相同",
+        "get_user_account": "查看你的地址和公钥，与认证时相同",
         "get_user_wallet": "查看你的钱包地址",
         "get_user_wallet_info": "查看你其他币种钱包中的地址",
         "get_user_wallet_transactions": "查看你的钱包交易",
@@ -215,7 +215,7 @@
       "turn_on_label": "开启：{{what}}",
       "until_tab_closes_about": "这是什么意思",
       "until_tab_closes_count": "直到关闭此标签页（{{n}}）",
-      "until_tab_closes_info": "在你关闭此标签页之前，此应用无需询问即可在此标签页中执行的操作。这些随你批准的内容一起授予，例如它的登录。选择其中一项即可收回：之后应用会先询问你，或无法执行该操作。在关闭标签页之前，你可以在这里再次允许。"
+      "until_tab_closes_info": "在你关闭此标签页之前，此应用无需询问即可在此标签页中执行的操作。这些随你批准的内容一起授予，例如它的认证。选择其中一项即可收回：之后应用会先询问你，或无法执行该操作。在关闭标签页之前，你可以在这里再次允许。"
     },
     "always_asks": "预算从不涵盖付款、应用费用、名称、交易、群组变更、你的头像、以你的名称发布的应用或网站、Hub 库中的评分，以及任何替换已发布内容的操作。",
     "amount": "金额",

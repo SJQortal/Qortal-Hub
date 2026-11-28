@@ -199,11 +199,11 @@ type AllowedForAppProps = {
  *
  * Turning one of the former off also takes its counterpart out of this tab's
  * session, and a counterpart isn't listed apart while the former is on: the
- * box's own use gives it back (a sign-in gives the tab its look-ups).
+ * box's own use gives it back (authenticating gives the tab its look-ups).
  *
  * Nothing turned off leaves the list: a box or the notifications stay with
  * Turn on, and what was taken back from the tab stays, greyed, with Allow
- * again, until the tab closes. A sign-in doesn't hand that back.
+ * again, until the tab closes. Authenticating doesn't hand that back.
  */
 export function AllowedForApp({ address, app, tabId }: AllowedForAppProps) {
   const theme = useTheme();

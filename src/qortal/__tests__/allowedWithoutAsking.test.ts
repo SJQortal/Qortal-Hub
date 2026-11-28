@@ -327,7 +327,7 @@ describe("a tab's session permissions", () => {
 // What the panel's Turn off does for what it lists, and that the next such
 // request asks again.
 describe('taking back and allowing again', () => {
-  it("a sign-in doesn't hand back what was taken back from the tab", async () => {
+  it("authenticating doesn't hand back what was taken back from the tab", async () => {
     await setPermission('qAPPAutoAuth-Opened-App', true);
     await signInFrom('t1');
     expect(hasSessionPermission('t1', 'Opened-App', 'GET_USER_WALLET')).toBe(
@@ -337,7 +337,8 @@ describe('taking back and allowing again', () => {
       takeBack: true,
     });
 
-    // The tab signs in afresh, as after its Sign in box went off and on.
+    // The tab authenticates afresh, as after its Authenticate box went off
+    // and on.
     revokeSessionPermission('t1', 'Opened-App', 'GET_USER_ACCOUNT');
     await signInFrom('t1');
     expect(hasSessionPermission('t1', 'Opened-App', 'GET_USER_ACCOUNT')).toBe(
@@ -352,7 +353,7 @@ describe('taking back and allowing again', () => {
     expect(getTakenBackSessionPermissions('t1', 'Opened-App')).toEqual([
       'GET_USER_WALLET',
     ]);
-    // Another tab of the app signs in with everything.
+    // Another tab of the app authenticates with everything.
     await signInFrom('t2');
     expect(hasSessionPermission('t2', 'Opened-App', 'GET_USER_WALLET')).toBe(
       true
@@ -360,7 +361,7 @@ describe('taking back and allowing again', () => {
     clearSessionPermissionsByTabId('t2');
   });
 
-  it('gives the sign-in back when the user approves one in the window, though it was taken back', async () => {
+  it('gives the authentication back when the user approves one in the window, though it was taken back', async () => {
     setSessionPermissions('t1', 'Opened-App', ['GET_USER_ACCOUNT']);
     revokeSessionPermission('t1', 'Opened-App', 'GET_USER_ACCOUNT', {
       takeBack: true,
@@ -458,7 +459,7 @@ describe('taking back and allowing again', () => {
     expect(hubStore.qortalRequestPermissions).toMatchObject({
       [`account:${ACCOUNT_A}:qAPPAutoAuth-Opened-App`]: true,
     });
-    // Signing in goes through again without a window.
+    // Authenticating goes through again without a window.
     await expect(signInFrom('t1')).resolves.toMatchObject({
       address: ACCOUNT_A,
     });
@@ -509,9 +510,9 @@ describe('turning off what the panel lists', () => {
   // Hub's tab ids are text; these two are typed with a number.
   const NOTIFYING_APP = APP as never;
 
-  it('the Sign in box: the tab loses the sign-in it gave, and signing in asks', async () => {
+  it('the Authenticate box: the tab loses the authentication it gave, and authenticating asks', async () => {
     await setPermission('qAPPAutoAuth-Opened-App', true);
-    // The box lets a sign-in through, and gives the tab its look-ups.
+    // The box lets the app authenticate, and gives the tab its look-ups.
     await expect(signInFrom('t1')).resolves.toMatchObject({
       address: ACCOUNT_A,
     });
@@ -520,7 +521,7 @@ describe('turning off what the panel lists', () => {
     expect(
       await turnOffAccountChoice(ACCOUNT_A, 'qAPPAutoAuth-Opened-App')
     ).toBe(true);
-    revokeSessionPermission('t1', 'Opened-App', SESSION_TWIN.sign_in);
+    revokeSessionPermission('t1', 'Opened-App', SESSION_TWIN.authenticate);
 
     const asked = signInFrom('t1');
     await settle();

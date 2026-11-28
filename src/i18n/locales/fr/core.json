@@ -173,11 +173,11 @@
     "allowed": {
       "allow_again_label": "autoriser à nouveau : {{what}}",
       "every_app": "toutes les applications",
+      "kind_authenticate": "s'authentifier",
       "kind_balance": "voir votre solde {{coin}}",
       "kind_chat": "envoyer des messages de chat",
       "kind_lists": "lire vos listes, dans toutes les applications",
       "kind_notifications": "vous envoyer des notifications",
-      "kind_sign_in": "se connecter",
       "kind_transactions": "voir vos transactions {{coin}}",
       "kind_wallet": "voir votre adresse de portefeuille {{coin}}",
       "kind_wallet_info": "voir les infos de votre portefeuille {{coin}}",
@@ -188,7 +188,7 @@
       "session": {
         "add_foreign_server": "ajouter à votre nœud un serveur pour une autre cryptomonnaie",
         "get_list_items": "lire vos listes, comme les noms que vous avez bloqués",
-        "get_user_account": "voir votre adresse et votre clé publique, comme lors de la connexion",
+        "get_user_account": "voir votre adresse et votre clé publique, comme lors de l'authentification",
         "get_user_wallet": "voir les adresses de votre portefeuille",
         "get_user_wallet_info": "voir les adresses de votre portefeuille pour une autre cryptomonnaie",
         "get_user_wallet_transactions": "voir les transactions de votre portefeuille",
@@ -215,7 +215,7 @@
       "turn_on_label": "activer : {{what}}",
       "until_tab_closes_about": "ce que cela signifie",
       "until_tab_closes_count": "jusqu'à la fermeture de cet onglet ({{n}})",
-      "until_tab_closes_info": "ce que cette application peut faire dans cet onglet sans vous demander, jusqu'à ce que vous le fermiez. Cela vient de quelque chose que vous avez approuvé, comme sa connexion. Sélectionnez-en un pour le retirer : l'application vous demandera alors d'abord, ou ne pourra pas le faire. Vous pouvez l'autoriser à nouveau ici jusqu'à la fermeture de l'onglet."
+      "until_tab_closes_info": "ce que cette application peut faire dans cet onglet sans vous demander, jusqu'à ce que vous le fermiez. Cela vient de quelque chose que vous avez approuvé, comme son authentification. Sélectionnez-en un pour le retirer : l'application vous demandera alors d'abord, ou ne pourra pas le faire. Vous pouvez l'autoriser à nouveau ici jusqu'à la fermeture de l'onglet."
     },
     "always_asks": "un budget ne couvre jamais les paiements, les frais d'application, les noms, les échanges, les changements de groupe, votre avatar, une application ou un site web à votre nom, les notes dans la bibliothèque de Hub ni ce qui remplace un contenu déjà publié.",
     "amount": "montant",

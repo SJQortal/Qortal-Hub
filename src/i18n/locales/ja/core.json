@@ -173,11 +173,11 @@
     "allowed": {
       "allow_again_label": "もう一度許可：{{what}}",
       "every_app": "すべてのアプリ",
+      "kind_authenticate": "認証",
       "kind_balance": "{{coin}}残高の表示",
       "kind_chat": "チャットメッセージの送信",
       "kind_lists": "リストの読み取り（すべてのアプリ）",
       "kind_notifications": "通知の表示",
-      "kind_sign_in": "サインイン",
       "kind_transactions": "{{coin}}取引の表示",
       "kind_wallet": "{{coin}}ウォレットのアドレスの表示",
       "kind_wallet_info": "{{coin}}ウォレット情報の表示",
@@ -188,7 +188,7 @@
       "session": {
         "add_foreign_server": "ノードに他のコイン用のサーバーを追加",
         "get_list_items": "リストの読み取り（ブロックした名前など）",
-        "get_user_account": "アドレスと公開鍵の表示（サインイン時と同じ）",
+        "get_user_account": "アドレスと公開鍵の表示（認証時と同じ）",
         "get_user_wallet": "ウォレットのアドレスの表示",
         "get_user_wallet_info": "他のコインのウォレットにあるアドレスの表示",
         "get_user_wallet_transactions": "ウォレットの取引の表示",
@@ -215,7 +215,7 @@
       "turn_on_label": "オンにする：{{what}}",
       "until_tab_closes_about": "これの意味",
       "until_tab_closes_count": "このタブを閉じるまで（{{n}}）",
-      "until_tab_closes_info": "このタブを閉じるまで、このアプリが確認なしでこのタブでできること。サインインなど、あなたが承認したものに付いてきました。選ぶと取り消せます。その後、アプリはまず確認するか、それを行えなくなります。タブを閉じるまではここでもう一度許可できます。"
+      "until_tab_closes_info": "このタブを閉じるまで、このアプリが確認なしでこのタブでできること。認証など、あなたが承認したものに付いてきました。選ぶと取り消せます。その後、アプリはまず確認するか、それを行えなくなります。タブを閉じるまではここでもう一度許可できます。"
     },
     "always_asks": "予算は、支払い、アプリ手数料、名前、取引、グループの変更、アバター、あなたの名前でのアプリやウェブサイト、Hubのライブラリでの評価、公開済みのものを置き換える操作には使われません。",
     "amount": "金額",

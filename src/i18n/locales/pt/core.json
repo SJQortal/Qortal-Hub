@@ -173,11 +173,11 @@
     "allowed": {
       "allow_again_label": "permitir de novo: {{what}}",
       "every_app": "todos os apps",
+      "kind_authenticate": "autenticar",
       "kind_balance": "ver seu saldo de {{coin}}",
       "kind_chat": "enviar mensagens de chat",
       "kind_lists": "ler suas listas, em todos os apps",
       "kind_notifications": "mostrar notificações para você",
-      "kind_sign_in": "entrar",
       "kind_transactions": "ver suas transações de {{coin}}",
       "kind_wallet": "ver seu endereço da carteira {{coin}}",
       "kind_wallet_info": "ver as informações da sua carteira {{coin}}",
@@ -188,7 +188,7 @@
       "session": {
         "add_foreign_server": "adicionar ao seu nó um servidor para outra moeda",
         "get_list_items": "ler suas listas, como os nomes que você bloqueou",
-        "get_user_account": "ver seu endereço e sua chave pública, como ao entrar",
+        "get_user_account": "ver seu endereço e sua chave pública, como ao autenticar",
         "get_user_wallet": "ver os endereços da sua carteira",
         "get_user_wallet_info": "ver os endereços da sua carteira de outra moeda",
         "get_user_wallet_transactions": "ver as transações da sua carteira",
@@ -215,7 +215,7 @@
       "turn_on_label": "ativar: {{what}}",
       "until_tab_closes_about": "o que isto significa",
       "until_tab_closes_count": "até esta aba ser fechada ({{n}})",
-      "until_tab_closes_info": "o que este app pode fazer nesta aba sem perguntar a você, até você fechar a aba. Isso veio com algo que você aprovou, como o login dele. Selecione um para retirá-lo: o app então pergunta a você primeiro, ou não consegue fazer isso. Você pode permitir de novo aqui até a aba ser fechada."
+      "until_tab_closes_info": "o que este app pode fazer nesta aba sem perguntar a você, até você fechar a aba. Isso veio com algo que você aprovou, como a autenticação dele. Selecione um para retirá-lo: o app então pergunta a você primeiro, ou não consegue fazer isso. Você pode permitir de novo aqui até a aba ser fechada."
     },
     "always_asks": "um orçamento nunca cobre pagamentos, taxas de aplicativos, nomes, negociações, alterações de grupo, seu avatar, um app ou site com seu nome, avaliações na biblioteca do Hub nem nada que substitua algo já publicado.",
     "amount": "valor",

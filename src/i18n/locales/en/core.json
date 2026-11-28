@@ -173,11 +173,11 @@
     "allowed": {
       "allow_again_label": "allow again: {{what}}",
       "every_app": "every app",
+      "kind_authenticate": "authenticate",
       "kind_balance": "see your {{coin}} balance",
       "kind_chat": "send chat messages",
       "kind_lists": "read your lists, in every app",
       "kind_notifications": "show you notifications",
-      "kind_sign_in": "sign in",
       "kind_transactions": "see your {{coin}} transactions",
       "kind_wallet": "see your {{coin}} wallet address",
       "kind_wallet_info": "see your {{coin}} wallet info",
@@ -188,7 +188,7 @@
       "session": {
         "add_foreign_server": "add a server for another coin to your node",
         "get_list_items": "read your lists, such as the names you blocked",
-        "get_user_account": "see your address and public key, as when it signs you in",
+        "get_user_account": "see your address and public key, as when it authenticates",
         "get_user_wallet": "see your wallet addresses",
         "get_user_wallet_info": "see the addresses in your wallet for another coin",
         "get_user_wallet_transactions": "see your wallet transactions",
@@ -215,7 +215,7 @@
       "turn_on_label": "turn on: {{what}}",
       "until_tab_closes_about": "what this means",
       "until_tab_closes_count": "until this tab closes ({{n}})",
-      "until_tab_closes_info": "what this app may do in this tab without asking you, until you close the tab. It came with something you approved, such as its sign-in. Select one to take it back: the app then asks you first, or can't do it. You can allow it again here until the tab closes."
+      "until_tab_closes_info": "what this app may do in this tab without asking you, until you close the tab. It came with something you approved, such as letting it authenticate. Select one to take it back: the app then asks you first, or can't do it. You can allow it again here until the tab closes."
     },
     "always_asks": "a budget never covers payments, app fees, names, trades, group changes, your avatar, an app or website under your name, ratings in Hub's library, or anything that replaces what is already published.",
     "amount": "amount",

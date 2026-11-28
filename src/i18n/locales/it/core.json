@@ -173,11 +173,11 @@
     "allowed": {
       "allow_again_label": "consenti di nuovo: {{what}}",
       "every_app": "tutte le app",
+      "kind_authenticate": "autenticarsi",
       "kind_balance": "vedere il tuo saldo {{coin}}",
       "kind_chat": "inviare messaggi di chat",
       "kind_lists": "leggere le tue liste, in tutte le app",
       "kind_notifications": "mostrarti notifiche",
-      "kind_sign_in": "accedere",
       "kind_transactions": "vedere le tue transazioni {{coin}}",
       "kind_wallet": "vedere il tuo indirizzo del wallet {{coin}}",
       "kind_wallet_info": "vedere le informazioni del tuo wallet {{coin}}",
@@ -188,7 +188,7 @@
       "session": {
         "add_foreign_server": "aggiungere al tuo nodo un server per un'altra moneta",
         "get_list_items": "leggere le tue liste, come i nomi che hai bloccato",
-        "get_user_account": "vedere il tuo indirizzo e la tua chiave pubblica, come quando accedi",
+        "get_user_account": "vedere il tuo indirizzo e la tua chiave pubblica, come quando si autentica",
         "get_user_wallet": "vedere gli indirizzi del tuo wallet",
         "get_user_wallet_info": "vedere gli indirizzi del tuo wallet per un'altra moneta",
         "get_user_wallet_transactions": "vedere le transazioni del tuo wallet",
@@ -215,7 +215,7 @@
       "turn_on_label": "attiva: {{what}}",
       "until_tab_closes_about": "cosa significa",
       "until_tab_closes_count": "finché questa scheda non viene chiusa ({{n}})",
-      "until_tab_closes_info": "ciò che questa app può fare in questa scheda senza chiederti, finché non la chiudi. È arrivato con qualcosa che hai approvato, come il suo accesso. Selezionane uno per revocarlo: l'app te lo chiederà prima, oppure non potrà farlo. Puoi consentirlo di nuovo qui finché la scheda non viene chiusa."
+      "until_tab_closes_info": "ciò che questa app può fare in questa scheda senza chiederti, finché non la chiudi. È arrivato con qualcosa che hai approvato, come la sua autenticazione. Selezionane uno per revocarlo: l'app te lo chiederà prima, oppure non potrà farlo. Puoi consentirlo di nuovo qui finché la scheda non viene chiusa."
     },
     "always_asks": "un budget non copre mai pagamenti, commissioni delle app, nomi, scambi, modifiche ai gruppi, il tuo avatar, un'app o un sito web a tuo nome, le valutazioni nella libreria di Hub o ciò che sostituisce qualcosa già pubblicato.",
     "amount": "importo",

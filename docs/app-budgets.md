@@ -185,7 +185,7 @@ its requests through without a window, each with **Turn off**:
 Turn off works only while that account is signed in:
 
 - A box is stored as not allowed. A box's own use gives the tab a session
-  permission too (a sign-in gives `GET_USER_ACCOUNT` and the look-ups), so
+  permission too (Authenticate gives `GET_USER_ACCOUNT` and the look-ups), so
   turning the box off also takes its counterpart (`SESSION_TWIN`) out of this
   tab. While the box is on, that counterpart isn't listed apart.
 - Notifications are turned off as the notification settings do: the stored
@@ -210,11 +210,12 @@ Nothing turned off leaves the list, so it can be turned on again:
 - What the user took back from the tab stays, greyed, with **Allow again**
   until the tab closes, also across a refresh of the app
   (`revokeSessionPermission(..., { takeBack: true })`,
-  `getTakenBackSessionPermissions`, `allowSessionPermissionAgain`). A
-  sign-in's look-ups (`AUTO_GRANTED_PERMISSIONS_ON_AUTH`) leave out what was
-  taken back from that tab; the sign-in itself is given as before. Allowing
-  it again ends that, and so does a window that gives the permission itself:
-  a sign-in gives `GET_USER_ACCOUNT`, the notification prompt
+  `getTakenBackSessionPermissions`, `allowSessionPermissionAgain`). The
+  look-ups an authentication gives (`AUTO_GRANTED_PERMISSIONS_ON_AUTH`) leave
+  out what was taken back from that tab; the authentication itself is given
+  as before. Allowing it again ends that, and so does a window that gives the
+  permission itself: authenticating gives `GET_USER_ACCOUNT`, the notification
+  prompt
   `NOTIFICATION_PERMISSION`, a backend connection `PRIVATE_DATA_CHANNEL`, and
   the app's `SESSION_PERMISSIONS` request what it lists. A request approved
   once in its own window, such as a look-up, is answered without giving it
