@@ -30,6 +30,10 @@ import {
 import { normalizeQappIdentityContext } from '../qortal/qapp-identity';
 import { dispatchQAppScreenCaptureRequest } from '../qortal/qapp-screen-capture-request';
 import {
+  isQortPaymentRequest,
+  paymentOutcomeUnknownError,
+} from '../transactions/paymentAnswer';
+import {
   dispatchQAppFileSaveRequest,
   isQAppFileSaveAction,
 } from '../qortal/qapp-file-save-request';
@@ -149,12 +153,14 @@ class Semaphore {
 let semaphore = new Semaphore(1);
 let reader = new FileReader();
 
-const fileToBase64 = (file) =>
-  new Promise(async (resolve, reject) => {
-    if (!reader) {
-      reader = new FileReader();
-    }
-    await semaphore.acquire();
+const fileToBase64 = async (file) => {
+  // The semaphore is awaited before the promise is built: an async executor
+  // would strand this promise if the acquire threw.
+  if (!reader) {
+    reader = new FileReader();
+  }
+  await semaphore.acquire();
+  return new Promise((resolve, reject) => {
     reader.readAsDataURL(file);
     reader.onload = () => {
       const dataUrl = reader.result;
@@ -177,6 +183,7 @@ const fileToBase64 = (file) =>
       semaphore.release();
     };
   });
+};
 
 export function openIndexedDB() {
   return new Promise((resolve, reject) => {
@@ -579,8 +586,13 @@ export const useQortalMessageListener = (
   appIdentifier,
   nativeViewRef,
   nativeGuestActive,
-  guestDocumentId
+  guestDocumentId,
+  // What the tab is, for app budgets: a private app and a preview of an
+  // unpublished app never use one.
+  tabKind: { isPrivate?: boolean; isPreview?: boolean } = {}
 ) => {
+  const isPrivateApp = !!tabKind.isPrivate;
+  const isPreviewApp = !!tabKind.isPreview;
   const [path, setPath] = useState('');
   const [history, setHistory] = useState({
     customQDNHistoryPaths: [],
@@ -789,6 +801,11 @@ export const useQortalMessageListener = (
                         name: appName,
                         service: appService,
                         tabId,
+                        // A private app, a preview or an app in Dev Mode
+                        // never uses an app budget.
+                        ...(isPrivateApp ? { isPrivate: true } : {}),
+                        ...(isPreviewApp ? { isPreview: true } : {}),
+                        ...(isDevMode ? { isDevMode: true } : {}),
                       }
                     );
 
@@ -833,7 +850,12 @@ export const useQortalMessageListener = (
             console.error('Failed qortalRequest', error);
             eventPort.postMessage({
               result: null,
-              error: serializeQortalRequestError(error),
+              error: serializeQortalRequestError(
+                // Hub stopped waiting, yet the payment may still go through.
+                isQortPaymentRequest(message?.payload)
+                  ? paymentOutcomeUnknownError()
+                  : error
+              ),
             });
           });
       };
@@ -993,6 +1015,8 @@ export const useQortalMessageListener = (
     return attachQAppRequestBridge(nativeView, guestDocumentId, listener);
   }, [
     isDevMode,
+    isPrivateApp,
+    isPreviewApp,
     appName,
     appService,
     tabId,
