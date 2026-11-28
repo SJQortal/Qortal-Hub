@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useId, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import {
   Box,
   ButtonBase,
@@ -14,6 +14,7 @@ import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
 import HubRoundedIcon from '@mui/icons-material/HubRounded';
 import TuneRoundedIcon from '@mui/icons-material/TuneRounded';
 import BoltRoundedIcon from '@mui/icons-material/BoltRounded';
+import FolderSharedRoundedIcon from '@mui/icons-material/FolderSharedRounded';
 import OpenInNewRoundedIcon from '@mui/icons-material/OpenInNewRounded';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
@@ -37,6 +38,8 @@ import qortalLogoMinting from '../../assets/sidebar/qortal-logo-official-minting
 import { NodeStateLogo } from '../Desktop/NodeStateLogo';
 import { useNodeState } from '../Desktop/nodeState';
 import mintingWatermark from '../../assets/minting/blue-grey-menu-button2-1.png';
+import { DataSection, type DataFocus } from './DataSection';
+import { cleanFollowName } from './followedNames';
 import { NodeControlSection } from './NodeControlSection';
 import {
   quietSurfaceSx,
@@ -70,14 +73,24 @@ type NodeStatus = {
 export const NodeManagerHost = () => {
   const [open, setOpen] = useState(false);
   const [section, setSection] = useState<NodeManagerSection>('overview');
+  const [focus, setFocus] = useState<DataFocus | null>(null);
+  const focusCount = useRef(0);
   const isLocked = useAtomValue(appLockedAtom);
 
   useEffect(() => {
-    const onOpen = (event: CustomEvent<{ section?: unknown }>) => {
+    const onOpen = (
+      event: CustomEvent<{ name?: unknown; section?: unknown }>
+    ) => {
       // Nothing opens over the lock screen or behind it.
       if (isHubLocked()) return;
       const next = event?.detail?.section;
-      setSection(isNodeManagerSection(next) ? next : 'overview');
+      const shownSection = isNodeManagerSection(next) ? next : 'overview';
+      const name =
+        shownSection === 'data' ? cleanFollowName(event?.detail?.name) : null;
+      setSection(shownSection);
+      // Each open at a name shows it, also when it's the one shown already.
+      focusCount.current += 1;
+      setFocus(name ? { name, seq: focusCount.current } : null);
       setOpen(true);
     };
     subscribeToEvent(OPEN_NODE_MANAGER_EVENT, onOpen);
@@ -97,6 +110,7 @@ export const NodeManagerHost = () => {
 
   return (
     <NodeManager
+      focus={focus}
       onClose={() => setOpen(false)}
       onSectionChange={setSection}
       open={open}
@@ -106,11 +120,14 @@ export const NodeManagerHost = () => {
 };
 
 export const NodeManager = ({
+  focus = null,
   onClose,
   onSectionChange,
   open,
   section,
 }: {
+  /** A name to open the Data section at. */
+  focus?: DataFocus | null;
   onClose: () => void;
   onSectionChange: (section: NodeManagerSection) => void;
   open: boolean;
@@ -176,15 +193,22 @@ export const NodeManager = ({
             label: t('node:manager.section.control', capitalize),
           },
           {
+            icon: FolderSharedRoundedIcon,
+            id: 'data' as const,
+            label: t('node:manager.section.data', capitalize),
+          },
+          {
             icon: BoltRoundedIcon,
             id: 'minting' as const,
             label: t('node:manager.section.minting', capitalize),
           },
         ]),
   ];
-  // Node control isn't there for the public node.
+  // Node control and Data aren't there for the public node.
   const shown: NodeManagerSection =
-    isPublic && section === 'control' ? 'overview' : section;
+    isPublic && (section === 'control' || section === 'data')
+      ? 'overview'
+      : section;
 
   return (
     <Dialog
@@ -472,6 +496,7 @@ export const NodeManager = ({
           }}
         >
           <Sections
+            focus={focus}
             isPublic={isPublic}
             // A new node starts over.
             key={nodeBase}
@@ -493,12 +518,14 @@ export const NodeManager = ({
  * it's shown again. Only the shown section reads from the node.
  */
 const Sections = ({
+  focus,
   isPublic,
   nodeBase,
   onOpenMinting,
   onSetUpNode,
   shown,
 }: {
+  focus: DataFocus | null;
   isPublic: boolean;
   nodeBase: string;
   onOpenMinting: () => void;
@@ -535,6 +562,15 @@ const Sections = ({
         <Box hidden={shown !== 'control'}>
           <NodeControlSection
             active={shown === 'control'}
+            nodeBase={nodeBase}
+          />
+        </Box>
+      ) : null}
+      {kept('data') && !isPublic ? (
+        <Box hidden={shown !== 'data'}>
+          <DataSection
+            active={shown === 'data'}
+            focus={focus}
             nodeBase={nodeBase}
           />
         </Box>

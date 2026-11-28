@@ -71,6 +71,17 @@ describe('nodeAdminRequest', () => {
     });
   });
 
+  it('sends a JSON body as JSON when asked', async () => {
+    await nodeAdminRequest(NODE, '/lists/followedNames', {
+      body: '{"items":["Publisher"]}',
+      contentType: 'application/json',
+      method: 'POST',
+    });
+    const [, init] = fetchMock.mock.calls[0];
+    expect(init?.headers).toEqual({ 'Content-Type': 'application/json' });
+    expect(init?.redirect).toBe('error');
+  });
+
   it('sends a plain GET with no body and no headers', async () => {
     await nodeAdminRequest(NODE, '/admin/restart');
     const [url, init] = fetchMock.mock.calls[0];

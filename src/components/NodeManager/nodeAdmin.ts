@@ -55,7 +55,8 @@ const sameNode = (a: string, b: string) => {
  * The key goes only to that node: never to the public node, never when the
  * key Hub holds belongs to another node, and never through a redirect. It
  * travels as the `apiKey` parameter, as Hub's other admin calls send it (a
- * custom header would need a CORS preflight the node doesn't allow).
+ * custom header would need a CORS preflight the node doesn't allow; Core's
+ * CORS rule does allow `Content-Type`, which its lists API needs as JSON).
  * Returns the node's answer as text; throws `NodeAdminError` otherwise.
  */
 export const nodeAdminRequest = async (
@@ -63,11 +64,14 @@ export const nodeAdminRequest = async (
   path: string,
   {
     body,
+    contentType = 'text/plain',
     method = 'GET',
     signal,
     timeoutMs = ADMIN_TIMEOUT_MS,
   }: {
     body?: string;
+    /** How the body is sent: Core's peer and sync calls take plain text. */
+    contentType?: 'text/plain' | 'application/json';
     method?: 'GET' | 'POST' | 'DELETE';
     signal?: AbortSignal;
     timeoutMs?: number;
@@ -99,8 +103,7 @@ export const nodeAdminRequest = async (
     response = await fetch(url.toString(), {
       body,
       credentials: 'omit',
-      headers:
-        body === undefined ? undefined : { 'Content-Type': 'text/plain' },
+      headers: body === undefined ? undefined : { 'Content-Type': contentType },
       method,
       redirect: 'error',
       signal: controller.signal,
