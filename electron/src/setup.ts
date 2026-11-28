@@ -1,4 +1,6 @@
 import { registerMainWindowWalletStorage } from './main-window-storage';
+import { hostedFolderState, showHostedFolder } from './node-data-folder';
+import { qortaldir, winjar } from './core-constants';
 import {
   installMainWindowNavigationPolicy,
   isMainWindowUrl,
@@ -2462,6 +2464,34 @@ ipcMain.handle('coreSetup:isCoreInstalledOnSystem', async () => {
 
     return isInstalled;
   } catch (error) {}
+});
+
+// Core's own folder on this PC, as Hub's Core setup knows it.
+const coreFolderForNodeData = async () =>
+  (await customQortalInstalledDir()) ||
+  (process.platform === 'win32' ? path.dirname(winjar) : qortaldir);
+
+// Opens the file manager at one publish's folder in Core's data folder (the
+// Node Manager's Data section, for a node on this PC).
+ipcMain.handle('nodeData:showFolder', async (_event, signature: unknown) => {
+  try {
+    return await showHostedFolder(
+      await coreFolderForNodeData(),
+      signature,
+      (folder) => shell.showItemInFolder(folder)
+    );
+  } catch {
+    return 'invalid';
+  }
+});
+
+// Whether that folder is still there.
+ipcMain.handle('nodeData:folderState', async (_event, signature: unknown) => {
+  try {
+    return await hostedFolderState(await coreFolderForNodeData(), signature);
+  } catch {
+    return 'unknown';
+  }
 });
 
 ipcMain.handle('coreSetup:installCore', async (event) => {

@@ -1137,6 +1137,13 @@ try {
   });
 
   // Expose it
+  contextBridge.exposeInMainWorld('nodeData', {
+    folderState: (signature: string) =>
+      ipcRenderer.invoke('nodeData:folderState', signature),
+    showFolder: (signature: string) =>
+      ipcRenderer.invoke('nodeData:showFolder', signature),
+  });
+
   contextBridge.exposeInMainWorld('coreSetup', {
     isCoreRunning: async () => {
       const raw = await ipcRenderer.invoke('coreSetup:isCoreRunning');
